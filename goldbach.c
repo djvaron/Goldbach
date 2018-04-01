@@ -4,11 +4,8 @@
 #include "math.h"
 using namespace std;
 
-void isprime(int n)
+void sieve_of_erast(int n)
 {
-    // Create a boolean array "prime[0..n]" and initialize
-    // all entries it as true. A value in prime[i] will
-    // finally be false if i is Not a prime, else true.
     bool prime[n+1];
     memset(prime, true, sizeof(prime));
     int smallest_square;
@@ -25,6 +22,7 @@ void isprime(int n)
     }
     
 }
+
 
 
 
