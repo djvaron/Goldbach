@@ -4,7 +4,7 @@
 #include "math.h"
 using namespace std;
 
-void sieve_of_erast(int n)
+void sieve_of_eratosthenes(int n)
 {
     bool prime[n+1];
     memset(prime, true, sizeof(prime));
