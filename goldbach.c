@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "omp.h"
 #include "time.h"
-
+#define nt 2
 int * sieve(int limit, int* numPrimes){
     unsigned int i,j;
     int *primes;
@@ -41,12 +42,15 @@ return primesArray;
 }
 
 int isprime(int number) { //returns non zero if number is prime
+#pragma omp parallel num_threads(nt){
   int largestSquare = (int) floor(pow(number, 0.5));
-    for (int i = 2; i <=largestSquare; i++) {
+#pragma omp for
+ for (int i = 2; i <=largestSquare; i++) {
         if (number % i == 0) {
             return 0;
         }
     }
+}
     return 1;
 }    
 
@@ -61,7 +65,8 @@ int main(int argc, char** argv) {
     
     int * primesArray = sieve(upper/2, &numPrimes);    
     printf("numPrimes: %d\n", numPrimes); 
- 
+#pragma omp parallel num_threads(nt){
+#pragma omp for 
     for (int n = lower; n <= upper; n += 2) {
         count = 0;
 	for (int i = 0; i <= numPrimes; i++) {
@@ -75,7 +80,7 @@ int main(int argc, char** argv) {
 	    printf("FALSE %d", n);
 	}
     }
-   
+}
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
     printf("time spent: %g seconds\n",time_spent);
