@@ -19,6 +19,7 @@ int * sieve(int limit, int* numPrimes){
 
     for (i = 2; i < limit; i++)
         if (primes[i])
+	  
             for (j = i; i * j < limit; j++)
                 primes[i * j] = 0;
 
@@ -40,7 +41,8 @@ return primesArray;
 }
 
 int isprime(int number) { //returns non zero if number is prime
-    for (int i = 2; i * i <= number; i++) {
+  int largestSquare = (int) floor(pow(number, 0.5));
+    for (int i = 2; i <=largestSquare; i++) {
         if (number % i == 0) {
             return 0;
         }
@@ -59,7 +61,7 @@ int main(int argc, char** argv) {
     
     int * primesArray = sieve(upper/2, &numPrimes);    
     printf("numPrimes: %d\n", numPrimes); 
-   
+ 
     for (int n = lower; n <= upper; n += 2) {
         count = 0;
 	for (int i = 0; i <= numPrimes; i++) {
