@@ -46,6 +46,15 @@ int isprime(int number) { //returns non zero if number is prime
     return 1;
 }    
 
+int isvalueinarray(int val, int *arr, int size){
+    int i;
+    for (i=0; i < size; i++) {
+        if (arr[i] == val)
+            return 1;
+    }
+    return 0;
+}
+
 int main(int argc, char** argv) {
     
     int numPrimes;
@@ -55,13 +64,13 @@ int main(int argc, char** argv) {
 
     clock_t begin = clock();
     
-    int * primesArray = sieve(upper/2, &numPrimes);    
+    int * primesArray = sieve(upper, &numPrimes);    
     printf("numPrimes: %d\n", numPrimes); 
    
     for (int n = lower; n <= upper; n += 2) {
         count = 0;
 	for (int i = 0; i <= numPrimes; i++) {
-            if (isprime(n - primesArray[i])) {
+            if (isvalueinarray(n - primesArray[i],primesArray,numPrimes)) {
                 printf("TRUE %d = %d + %d\n", n, primesArray[i], n - primesArray[i]);
                 count = 1;
 		break;
