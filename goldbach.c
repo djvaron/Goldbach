@@ -14,8 +14,10 @@ int * sieve(int limit, int* numPrimes){
 
     primes = malloc(sizeof(int) * limit);
     primesArrayTmp = malloc(sizeof(int) * limit);
-
-    for (i = 2; i < limit; i++)
+#pragma omp parallel num_threads(nt)
+    {
+#pragma omp for    
+for (i = 2; i < limit; i++)
         primes[i] = 1;
 
     for (i = 2; i < limit; i++)
@@ -23,7 +25,7 @@ int * sieve(int limit, int* numPrimes){
 	  
             for (j = i; i * j < limit; j++)
                 primes[i * j] = 0;
-
+#pragma omp for
     for (i = 2; i < limit; i++)
         if (primes[i]){
             primesArrayTmp[*numPrimes] = i;
@@ -33,26 +35,25 @@ int * sieve(int limit, int* numPrimes){
    
     printf("\nPrime numbers in range 1 to %d are: \n", limit);
     primesArray = malloc(sizeof(int) * *numPrimes);
+#pragma omp for
     for (i = 0; i < *numPrimes; i++){
         primesArray[i] = primesArrayTmp[i];
         printf("%d\n", primesArray[i]);
         }
-
+    }
 return primesArray;
 }
 
 int isprime(int number) { //returns non zero if number is prime
-#pragma omp parallel num_threads(nt){
-  int largestSquare = (int) floor(pow(number, 0.5));
-#pragma omp for
- for (int i = 2; i <=largestSquare; i++) {
+  int i = 2;  
+  for   (i = 2; i*i <=number; i++) {
         if (number % i == 0) {
             return 0;
         }
     }
-}
+
     return 1;
-}    
+}  
 
 int main(int argc, char** argv) {
     
@@ -64,23 +65,30 @@ int main(int argc, char** argv) {
     clock_t begin = clock();
     
     int * primesArray = sieve(upper/2, &numPrimes);    
-    printf("numPrimes: %d\n", numPrimes); 
-#pragma omp parallel num_threads(nt){
-#pragma omp for 
-    for (int n = lower; n <= upper; n += 2) {
+    printf("numPrimes: %d\n", numPrimes);
+    int n;
+
+#pragma omp parallel num_threads(nt)
+    {
+#pragma omp for
+    for ( n = lower; n <= upper; n += 2) {
         count = 0;
-	for (int i = 0; i <= numPrimes; i++) {
+	int i = 0;
+	for (i = 0; i <= numPrimes; i++) {
             if (isprime(n - primesArray[i])) {
                 printf("TRUE %d = %d + %d\n", n, primesArray[i], n - primesArray[i]);
                 count = 1;
 		break;
 	    }
-        }
+        
+	}
         if (count == 0) {
 	    printf("FALSE %d", n);
 	}
+    
     }
-}
+    }
+
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
     printf("time spent: %g seconds\n",time_spent);
