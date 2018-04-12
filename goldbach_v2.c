@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
    
     for (int n = lower; n <= upper; n += 2) {
         count = 0;
-	for (int i = 0; i <= numPrimes; i++) {
+	for (int i = numPrimes; i >= 0; i--) {
             if (isvalueinarray(n - primesArray[i],primesArray,numPrimes)) {
                 printf("TRUE %d = %d + %d\n", n, primesArray[i], n - primesArray[i]);
                 count = 1;
