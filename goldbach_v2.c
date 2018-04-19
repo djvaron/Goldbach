@@ -27,11 +27,11 @@ int * sieve(int limit, int* numPrimes){
             *numPrimes = *numPrimes + 1;
         }
    
-    printf("\nPrime numbers in range 1 to %d are: \n", limit);
+    //printf("\nPrime numbers in range 1 to %d are: \n", limit);
     primesArray = malloc(sizeof(int) * *numPrimes);
     for (i = 0; i < *numPrimes; i++){
         primesArray[i] = primesArrayTmp[i];
-        printf("%d\n", primesArray[i]);
+        //printf("%d\n", primesArray[i]);
         }
 
 return primesArray;
@@ -65,13 +65,13 @@ int main(int argc, char** argv) {
     clock_t begin = clock();
     
     int * primesArray = sieve(upper, &numPrimes);    
-    printf("numPrimes: %d\n", numPrimes); 
+    //printf("numPrimes: %d\n", numPrimes); 
    
     for (int n = lower; n <= upper; n += 2) {
         count = 0;
 	for (int i = numPrimes; i >= 0; i--) {
             if (isvalueinarray(n - primesArray[i],primesArray,numPrimes)) {
-                printf("TRUE %d = %d + %d\n", n, primesArray[i], n - primesArray[i]);
+                //printf("TRUE %d = %d + %d\n", n, primesArray[i], n - primesArray[i]);
                 count = 1;
 		break;
 	    }
