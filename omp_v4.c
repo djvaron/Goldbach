@@ -9,33 +9,22 @@ int * sieve(int limit){
     int *primes;
 
     primes = malloc(sizeof(int) * limit);
-#pragma omp parallel for  
-for (i = 2; i < limit; i++)
-        primes[i] = 1;
-int p;
-int n = floor(pow(limit,0.5));
-#pragma omp parallel for schedule(dynamic)
-for (p=2; p<=n; p++)
-
-        // If prime[p] is not changed, then it is a prime
-        if (primes[p] == 1)
-        {
-            // Update all multiples of p
-      int i;
-#pragma omp parallel for schedule(dynamic)
-      for ( i=p*2; i<=limit; i += p)
-                primes[i] = 0;
-        }
-    
-/*    for (i = 2; i < limit; i++)
+ #pragma omp parallel for schedule(static)
+ for (i = 2; i < limit; i++)
         primes[i] = 1;
 
-    for (i = 2; i < limit; i++)
-        if (primes[i])
-            for (j = i; i * j < limit; j++)
-                primes[i * j] = 0;
-*/
-    /* printf("\nPrime numbers in range 1 to %d are: \n", limit);
+ int n = floor(pow(limit,0.5));
+ #pragma omp parallel for schedule(dynamic)
+ for (i = 2; i < n; i++)
+     // If prime[i] is not changed, then it is a prime
+     if (primes[i]) {
+         // Update all multiples of i
+	 #pragma omp parallel for 
+         for ( j = 2*i; j < limit; j += i)
+             primes[j] = 0;
+     }
+
+/* printf("\nPrime numbers in range 1 to %d are: \n", limit);
     for (i = 2; i < limit; i++){
         if (primes[i])
             printf("%d\n", i);

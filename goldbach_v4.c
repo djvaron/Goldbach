@@ -8,28 +8,17 @@ int * sieve(int limit){
     int *primes;
 
     primes = malloc(sizeof(int) * limit);
- for (i = 2; i < limit; i++)
+    for (i = 2; i < limit; i++)
         primes[i] = 1;
-int p;
-for (p=2; p*p<=limit; p++)
 
-        // If prime[p] is not changed, then it is a prime
-        if (primes[p] == 1)
-        {
-            // Update all multiples of p
-      int i;
-      for ( i=p*2; i<=limit; i += p)
-                primes[i] = 0;
+    for (i = 2; i*i < limit; i++)
+        // If prime[i] is not changed, then it is a prime
+        if (primes[i]) {
+            // Update all multiples of i
+            for ( j = 2*i; j < limit; j += i)
+                primes[j] = 0;
         }
     
-/*    for (i = 2; i < limit; i++)
-        primes[i] = 1;
-
-    for (i = 2; i < limit; i++)
-        if (primes[i])
-            for (j = i; i * j < limit; j++)
-                primes[i * j] = 0;
-*/
     /* printf("\nPrime numbers in range 1 to %d are: \n", limit);
     for (i = 2; i < limit; i++){
         if (primes[i])
