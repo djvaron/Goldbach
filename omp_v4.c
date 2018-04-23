@@ -9,7 +9,7 @@ int * sieve(int limit){
     int *primes;
 
     primes = malloc(sizeof(int) * limit);
-#pragma omp parallel for schedule(dynamic) 
+#pragma omp parallel for  
 for (i = 2; i < limit; i++)
         primes[i] = 1;
 int p;
