@@ -11,22 +11,24 @@ int * sieve(int limit){
     primes = malloc(sizeof(int) * limit);
     #pragma acc kernels
     #pragma acc loop independent
-    for (i = 2; i < limit; i++)
-        primes[i] = 1;
+    for (i = 2; i < limit; i++)   {
+       primes[i] = 1;
+	}
     
     int val = floor(pow(limit, 0.5));
     
     #pragma acc kernels
     #pragma acc loop independent
-    for (i = 2; i < val; i++)
+    for (i = 2; i < val; i++)   {
         // If prime[i] is not changed, then it is a prime
         if (primes[i]) {
             // Update all multiples of i
             #pragma acc loop independent
-            for ( j = 2*i; j < limit; j += i)
+            for ( j = 2*i; j < limit; j += i)    {
                 primes[j] = 0;
+            }
         }
-    
+    }
     /* printf("\nPrime numbers in range 1 to %d are: \n", limit);
     for (i = 2; i < limit; i++){
         if (primes[i])
