@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "time.h"
 #include "openacc.h"
-
+#include "math.h"
 int * sieve(int limit){
     
     unsigned int i,j;
