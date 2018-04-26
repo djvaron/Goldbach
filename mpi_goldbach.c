@@ -47,6 +47,8 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Status status;
      
+    
+    printf("num processes %d",size);
     if (rank == 0){ // if you are the master thread ...
         // send sieve array to workers
         for (workeri = 1; workeri < size; workeri++){

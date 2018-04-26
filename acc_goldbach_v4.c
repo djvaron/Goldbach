@@ -9,12 +9,12 @@ int * sieve(int limit){
     int *primes;
 
     primes = malloc(sizeof(int) * limit);
-    #pragma acc loop kernels
+    #pragma acc kernels
     #pragma acc loop independent
     for (i = 2; i < limit; i++)
         primes[i] = 1;
     
-    int val = flor(pow(limit, 0.5));
+    int val = floor(pow(limit, 0.5));
     
     #pragma acc kernels
     #pragma acc loop independent
