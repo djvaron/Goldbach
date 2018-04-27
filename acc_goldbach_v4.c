@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include "time.h"
 #include "openacc.h"
-#include "math.h"
+#include <math.h>
+
 int * sieve(int limit){
     
     unsigned int i,j;
@@ -11,19 +12,18 @@ int * sieve(int limit){
     primes = malloc(sizeof(int) * limit);
     #pragma acc kernels
     #pragma acc loop independent
-    for (i = 2; i < limit; i++)   {
+    for (i = 2; i < limit; i++)  
        primes[i] = 1;
-	}
-    
+	   
     int val = floor(pow(limit, 0.5));
-    
+   
     #pragma acc kernels
-    #pragma acc loop independent
+    #pragma acc loop 
     for (i = 2; i < val; i++)   {
         // If prime[i] is not changed, then it is a prime
         if (primes[i]) {
             // Update all multiples of i
-            #pragma acc loop independent
+//            #pragma acc loop independent
             for ( j = 2*i; j < limit; j += i)    {
                 primes[j] = 0;
             }
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     
     int * primes = sieve(upper);    
     #pragma acc kernels
-    #pragma acc loop independent
+    #pragma acc loop 
     for (n = lower; n <= upper; n += 2) {
         count = 0;
         
@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
    
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
-    printf("time spent: %g seconds\n",time_spent);
+   // printf("time spent: %g seconds\n",time_spent);
 
     free(primes), primes = NULL;
 
