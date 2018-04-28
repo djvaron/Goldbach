@@ -9,21 +9,22 @@ int * sieve(int limit){
     unsigned int i,j;
     int *primes;
 
-    primes = malloc(sizeof(int) * limit);
-    #pragma acc kernels
+    primes = malloc(sizeof(unsigned short int) * limit);
+    #pragma acc kernels copyout(primes[2:limit-2])
     #pragma acc loop independent
     for (i = 2; i < limit; i++)  
        primes[i] = 1;
 	   
     int val = floor(pow(limit, 0.5));
    
-    #pragma acc kernels
-    #pragma acc loop 
+    #pragma acc kernels copyin(primes[2:val])
+    #pragma acc loop independent
     for (i = 2; i < val; i++)   {
         // If prime[i] is not changed, then it is a prime
         if (primes[i]) {
             // Update all multiples of i
-//            #pragma acc loop independent
+           #pragma acc loop independent
+	    
             for ( j = 2*i; j < limit; j += i)    {
                 primes[j] = 0;
             }
@@ -44,13 +45,13 @@ int main(int argc, char** argv) {
     int lower, upper, count, i, n;    
     lower = atoi(argv[1]);
     upper = atoi(argv[2]);
-
+    int t = 1;
     clock_t begin = clock();
     
-    int * primes = sieve(upper);    
-    #pragma acc kernels
-    #pragma acc loop 
-    for (n = lower; n <= upper; n += 2) {
+    unsigned short int * primes = sieve(upper);    
+
+    #pragma acc kernels loop private(t,primes[0:upper])
+   for (n = lower; n <= upper; n += 2) {
         count = 0;
         
 	for (i = 2; i <= n/2; i++) {
@@ -61,16 +62,16 @@ int main(int argc, char** argv) {
 	    }
         }
         if (count == 0) {
-	    printf("FALSE %d", n);
+//	   printf("FALSE %d,n");
+           t = 0;         
 	}
     }
    
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
    // printf("time spent: %g seconds\n",time_spent);
-
+    printf("t = 0 if false: t = %d",t);
     free(primes), primes = NULL;
-
     return 0;
 
 }          
