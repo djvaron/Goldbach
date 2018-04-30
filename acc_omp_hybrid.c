@@ -9,27 +9,28 @@ int * sieve(int limit){
     unsigned int i,j;
     int *primes;
 
-    primes = malloc(sizeof( int) * limit);
-    #pragma acc kernels copyout(primes[0:limit])
-    #pragma acc loop independent
-    for (i = 2; i < limit; i++)  
+    primes = malloc(sizeof(int) * limit);
+    #pragma acc kernels copy(primes[0:limit]) 
+    #pragma acc loop  
+    for (i = 2; i < limit; i++)      
        primes[i] = 1;
 	   
     int val = floor(pow(limit, 0.5));
    
-    #pragma acc kernels copyin(primes[0:limit])
-    #pragma acc loop independent
+    #pragma acc kernels copy(primes[0:limit]) 
+    {
+    #pragma acc loop seq 
     for (i = 2; i < val; i++)   {
         // If prime[i] is not changed, then it is a prime
         if (primes[i]) {
             // Update all multiples of i
-           #pragma acc loop independent
-	    
+          #pragma acc loop independent  
             for ( j = 2*i; j < limit; j += i)    {
                 primes[j] = 0;
             }
         }
     }
+}
     /* printf("\nPrime numbers in range 1 to %d are: \n", limit);
     for (i = 2; i < limit; i++){
         if (primes[i])
@@ -45,10 +46,9 @@ int main(int argc, char** argv) {
     int lower, upper, count, i, n;    
     lower = atoi(argv[1]);
     upper = atoi(argv[2]);
-//    int t = 1;
 //    clock_t begin = clock();
     double t1 = omp_get_wtime();    
-    int * primes = sieve(upper);    
+    int *primes = sieve(upper);    
 
     #pragma omp parallel for schedule(dynamic)
    for (n = lower; n <= upper; n += 2) {
@@ -62,16 +62,14 @@ int main(int argc, char** argv) {
 	    }
         }
         if (count == 0) {
-	   printf("FALSE %d,n");
-//         t = 0;         
+	   printf("FALSE %d",n);
 	}
     }
    
    // clock_t end = clock();
    //double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
-     double time_spent = omp_get_wtime() - t1;
-     printf("time spent: %g seconds\n",time_spent);
-//    printf("t = 0 if false: t = %d",t);
+    double time_spent = omp_get_wtime() - t1;
+    printf("time spent: %g seconds\n",time_spent);
     free(primes), primes = NULL;
     return 0;
 
