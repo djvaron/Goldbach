@@ -31,12 +31,12 @@ for (i = 2; i < n; i++)
      }
 }
 }
-/* printf("\nPrime numbers in range 1 to %d are: \n", limit);
+ printf("\nPrime numbers in range 1 to %d are: \n", limit);
     for (i = 2; i < limit; i++){
         if (primes[i])
             printf("%d\n", i);
         }
-    */
+    
 
 return primes;
 }
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
         count = 0;
 	for (i = 2; i <= n/2; i++) {
             if (primes[i] && primes[n-i]) {
-                //printf("TRUE %d = %d + %d\n", n, i, n-i);
+                printf("TRUE %d = %d + %d\n", n, i, n-i);
                 count = 1;
 		break;
 	    }
