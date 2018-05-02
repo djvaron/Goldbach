@@ -42,7 +42,7 @@ The serial code consists of a main program that verifies Goldbach's conjecture i
 ## Conclusions
 
 ## References
-
+e Silva, T.O., Herzog, S., and Pardi, S.: Empirical verification of the even Goldbach conjecture and computation of prime gaps up to 4&times;10<sup>18</sup>. _Math. Comput._, 83(288), 2033-2060, [https://doi.org/10.1090/S0025-5718-2013-02787-1](https://doi.org/10.1090/S0025-5718-2013-02787-1), 2014.
 
 ## example latex equation with HTML, from [codecogs](https://www.codecogs.com/latex/eqneditor.php):
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
