@@ -1,5 +1,5 @@
 # Numerical verification of Goldbach's conjecture with parallel computing
-Authors: Ada Shaw and Daniel Varon
+__Authors:__ Ada Shaw and Daniel Varon
 
 ## Introduction
 [Goldbach's Conjecture](https://en.wikipedia.org/wiki/Goldbach%27s_conjecture) (1742) proposes that every even number greater than 2 can be written as the sum of two prime numbers. While a formal proof has yet to be discovered, the conjecture has been verified empirically for even numbers up to 4&times;10<sup>18</sup> (Oliveira e Silva et al., 2013).
