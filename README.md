@@ -33,8 +33,7 @@ Example of vanilla compile &amp; run commands:
 
 ### 3.1. Eratosthenes sieve
 ```C
-int hmmm;
-we can put code here, with syntax highlighting.
+int we can put code here with syntax highlighting.
 ```
 
 ### 3.2. Main program
