@@ -1,4 +1,4 @@
-# Numerical verification of the Goldbach conjecture with parallel computing
+# Numerical verification of Goldbach's conjecture with parallel computing
 Authors: Ada Shaw and Daniel Varon
 
 ## Introduction
