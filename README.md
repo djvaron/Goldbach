@@ -38,6 +38,9 @@ we can put code here, with syntax highlighting.
 ```
 
 ### 3.2. Main program
+```C
+int such code, very smart, wow;
+```
 
 ## 4. OpenMP
 
