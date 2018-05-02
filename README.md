@@ -23,7 +23,10 @@ We tested the following forms of parallelism:
 ## System specifications
 
 ## Serial code
-The serial code consists of a main program that verifies Goldbach's conjecture iteratively for even numbers in a user-specified integer range, and a sieve subroutine for finding all the prime numbers in that range.
+The serial code `goldbach.c` consists of:
+  1. an Eratosthenes sieve subroutine for finding all the prime numbers in an input integer interval, and 
+  2. a main program for verifying Goldbach's conjecture for even numbers in the input interval.
+The program can be compiled with `gcc goldbach.c -o goldbach` and run with `./goldbach <x_min> <x_max>`.
 
 ### Sieve of Eratosthenes
 
