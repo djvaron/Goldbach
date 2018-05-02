@@ -27,7 +27,9 @@ The serial code `goldbach.c` consists of:
   1. an Eratosthenes sieve subroutine for finding all the prime numbers in an input integer interval, and 
   2. a main program for verifying Goldbach's conjecture for even numbers in the input interval.
 
-The program can be compiled with `gcc goldbach.c -o goldbach` and run with `./goldbach <x_min> <x_max>`.
+Example of vanilla compile &amp; run commands: 
+  * compile: `gcc goldbach.c -o goldbach`
+  * run: `./goldbach <x_min> <x_max>`.
 
 ### Sieve of Eratosthenes
 
@@ -50,3 +52,5 @@ The program can be compiled with `gcc goldbach.c -o goldbach` and run with `./go
 
 ## example latex equation with HTML, from [codecogs](https://www.codecogs.com/latex/eqneditor.php):
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
+[This stackoverflow page](https://stackoverflow.com/questions/11256433/how-to-show-math-equations-in-general-githubs-markdownnot-githubs-blog?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa) was also useful.
