@@ -31,7 +31,7 @@ Example of vanilla compile &amp; run commands:
   * compile: `gcc goldbach.c -o goldbach`
   * run: `./goldbach <x_min> <x_max>`.
 
-### 3.1. Sieve of Eratosthenes
+### 3.1. Eratosthenes sieve
 
 ### 3.2. Main program
 
