@@ -42,5 +42,5 @@ The serial code consists of a main program that verifies Goldbach's conjecture i
 ## References
 
 
-## example latex equation with HTML code from [codecogs](https://www.codecogs.com/latex/eqneditor.php):
+## example latex equation with HTML, from [codecogs](https://www.codecogs.com/latex/eqneditor.php):
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
