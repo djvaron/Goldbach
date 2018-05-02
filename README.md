@@ -5,9 +5,13 @@ Authors: Ada Shaw and Daniel Varon
 [Goldbach's Conjecture](https://en.wikipedia.org/wiki/Goldbach%27s_conjecture) (1742) proposes that every even number greater than 2 can be written as the sum of two prime numbers. While a formal proof has yet to be discovered, the conjecture has been verified empirically for even numbers up to 4&times;10<sup>18</sup> (Oliveira e Silva et al., 2013).
 
 DESCRIBE HOW PROBLEM IS TYPICALLY SOLVED. HOW DOES IT SCALE, THEORETICALLY?
-To verify Goldbach's conjecture for a range of even numbers X = range(xmin,xmax,2), one typically begins by identifying all prime numbers in X. This can be done using a sieve algorithm, e.g. [the Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes).
+To verify Goldbach's conjecture for even numbers in a range X = xmin..xmax, one typically begins by identifying all prime numbers in X. This can be done using a sieve algorithm -- for example, the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) -- which produces a Boolean array of length len(X) describing primeness (or not) of integers in X. Then, for each even number x<sub>i</sub> in X, one loops over integers 2 < n < x<sub>i</sub>/2, determining at each iteration whether both n and x<sub>i</sub>-n are prime. If so, the conjecture is satisfied for x<sub>i</sub>.
 
-We designed a simple algorithm in C for verifying Goldbach's conjecture and developed several parallel implementations of the code to identify the best strategies for tackling large problem sizes.
+Two factors limit scalability with increasing integer size:
+  1. The average cost of checking primeness grows.
+  2. The size of the Boolean sieve array, which occupies len(X) bytes.
+
+We designed a simple algorithm in C for verifying Goldbach's conjecture and developed several parallel implementations of the code to identify the best strategies for tackling large problem sizes, given the above limitations.
 
 We tested the following forms of parallelism:
 
