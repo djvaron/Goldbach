@@ -1,8 +1,8 @@
 # Numerical verification of the Goldbach conjecture with parallel computing
-Ada Shaw and Daniel Varon
+Authors: Ada Shaw and Daniel Varon
 
 ## Introduction
-Goldbach's Conjecture (1742) proposes that every even number greater than 2 can be written as the sum of two prime numbers. While a formal proof has yet to be discovered, the conjecture has been verified empirically for even numbers up to 4e18 (Oliveira e Silva et al., 2013).
+Goldbach's Conjecture (1742) proposes that every even number greater than 2 can be written as the sum of two prime numbers. While a formal proof has yet to be discovered, the conjecture has been verified empirically for even numbers up to $4\times10^{18}$ (Oliveira e Silva et al., 2013).
 
 DESCRIBE HOW PROBLEM IS TYPICALLY SOLVED. HOW DOES IT SCALE, THEORETICALLY?
 
