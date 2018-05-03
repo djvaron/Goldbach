@@ -64,9 +64,11 @@ int main(int argc, char** argv) {
     upper = atoi(argv[2]);
 
     clock_t begin = clock();
-
+    
+    /* construct sieve array */
     bool * primes = sieve(upper);
 
+    /* check conjecture for even integers in input integer range */
     for (n = lower; n <= upper; n += 2) {
         count = 0;
         for (i = 2; i <= n/2; i++) {
@@ -84,7 +86,8 @@ int main(int argc, char** argv) {
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("time spent: %g seconds\n",time_spent);
-
+   
+    /* erase sieve array */
     free(primes), primes = NULL;
 
     return 0;
