@@ -51,9 +51,11 @@ int main(int argc, char** argv) {
     double begin = omp_get_wtime();
     int * primes = sieve(upper);
     int jar = 0;    
-#pragma acc parallel copyin(primes[0:upper]) private(jar)
+#pragma acc data copyin(primes[0:upper])  
 {
-#pragma acc loop 
+#pragma acc region
+{
+#pragma acc loop private(jar) gang(100), vector(256)
     for (n = lower; n <= upper; n += 2) {
         count = 0;
 	for (i = 2; i <= n/2; i++) {
@@ -69,7 +71,7 @@ int main(int argc, char** argv) {
 	}
     }
 }
-
+}
    double time_spent = omp_get_wtime() - begin;
 //    clock_t end = clock();
 //    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
