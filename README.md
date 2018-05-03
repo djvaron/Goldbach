@@ -21,6 +21,7 @@ We tested the following forms of parallelism:
   * Hybrid ???-OpenACC parallelism
 
 ## 2. System specifications
+Experiments were carried out on the Harvard Odyssey research computing cluster.
 
 ## 3. Serial code
 The serial code `goldbach.c` consists of:
