@@ -34,7 +34,23 @@ Example of vanilla compile &amp; run commands:
 
 ### 3.1. Eratosthenes sieve
 ```C
-int we can put code here with syntax highlighting.
+bool * sieve(int limit){
+
+    unsigned int i,j;
+    bool *primes;
+
+    primes = malloc(sizeof(int) * limit);
+    for (i = 2; i < limit; i++)
+        primes[i] = 1;
+
+    for (i = 2; i*i < limit; i++)
+        if (primes[i]) {
+            for ( j = 2*i; j < limit; j += i)
+                primes[j] = 0;
+        }
+
+return primes;
+}
 ```
 
 ### 3.2. Main program
