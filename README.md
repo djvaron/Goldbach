@@ -33,9 +33,13 @@ Example of vanilla compile &amp; run commands:
   * run: `./goldbach <x_min> <x_max>`.
 
 ### 3.1. Eratosthenes sieve
-This subroutine initializes a Boolean array of 1's in heap memory with size `limit` = <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;x_{\text{max}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;x_{\text{max}}" title="x_{\text{max}}" /></a>.
 
 ```C
+#include <stdio.h>
+#include <stdlib.h>
+#include "time.h"
+#include "stdbool.h"
+
 bool * sieve(int limit){
 
     unsigned int i,j;
@@ -56,6 +60,8 @@ bool * sieve(int limit){
 return primes;
 }
 ```
+
+This subroutine initializes a Boolean array of 1's in heap memory with size `limit` = <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;x_{\text{max}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;x_{\text{max}}" title="x_{\text{max}}" /></a> bytes.
 
 ### 3.2. Main program
 ```C
