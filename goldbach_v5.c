@@ -8,7 +8,7 @@ bool * sieve(int limit){
     unsigned int i,j;
     bool *primes;
 
-    primes = malloc(sizeof(int) * limit);
+    primes = malloc(sizeof(bool) * limit);
     for (i = 2; i < limit; i++)
         primes[i] = 1;
 
