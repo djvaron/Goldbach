@@ -57,7 +57,38 @@ return primes;
 
 ### 3.2. Main program
 ```C
-int such code, very smart, wow;
+int main(int argc, char** argv) {
+
+    int lower, upper, count, i, n;
+    lower = atoi(argv[1]);
+    upper = atoi(argv[2]);
+
+    clock_t begin = clock();
+
+    bool * primes = sieve(upper);
+
+    for (n = lower; n <= upper; n += 2) {
+        count = 0;
+        for (i = 2; i <= n/2; i++) {
+            if (primes[i] && primes[n-i]) {
+                /* printf("TRUE %d = %d + %d\n", n, i, n-i); */
+                count = 1;
+                break;
+            }
+        }
+        if (count == 0) {
+            printf("FALSE %d", n);
+        }
+    }
+
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("time spent: %g seconds\n",time_spent);
+
+    free(primes), primes = NULL;
+
+    return 0;
+}
 ```
 
 ## 4. OpenMP
