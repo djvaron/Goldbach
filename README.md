@@ -48,7 +48,7 @@ bool * sieve(int limit){
     bool *primes;
     
     /* initialize primes array of 1's */
-    primes = malloc(sizeof(int) * limit);
+    primes = malloc(sizeof(bool) * limit);
     for (i = 2; i < limit; i++)
         primes[i] = 1;
 
