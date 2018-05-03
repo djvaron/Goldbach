@@ -39,7 +39,7 @@ bool * sieve(int limit){
     unsigned int i,j;
     bool *primes;
     
-    /* initialize primes array of 1s */
+    /* initialize primes array of 1's */
     primes = malloc(sizeof(int) * limit);
     for (i = 2; i < limit; i++)
         primes[i] = 1;
