@@ -6,7 +6,8 @@
 #include "openacc.h"
 
 int * sieve(int limit){
-    
+   
+ 
     unsigned int i,j;
     int *primes;
 
