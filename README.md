@@ -78,6 +78,7 @@ int main(int argc, char** argv) {
                 break;
             }
         }
+        /* print statement if conjecture is not satisfied */
         if (count == 0) {
             printf("FALSE %d", n);
         }
