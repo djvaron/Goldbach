@@ -33,6 +33,11 @@ Example of vanilla compile &amp; run commands:
   * run: `./goldbach <x_min> <x_max>`.
 
 ### 3.1. Eratosthenes sieve
+This subroutine initializes a Boolean array of 1's in heap memory with size `limit` = <a href="htt
+ps://www.codecogs.com/eqnedit.php?latex=\inline&space;x_{\text{max}}" target="_blank"><img s
+rc="https://latex.codecogs.com/gif.latex?\inline&space;x_{\text{max}}" title="x_{\text{max}}
+" /></a>.
+
 ```C
 bool * sieve(int limit){
 
