@@ -48,7 +48,7 @@ bool * sieve(int limit){
     bool *primes;
     
     /* initialize primes array of 1's */
-    primes = malloc(sizeof(int) * limit);
+    primes = malloc(sizeof(bool) * limit);
     for (i = 2; i < limit; i++)
         primes[i] = 1;
 
@@ -64,7 +64,7 @@ return primes;
 ```
 
 ### 3.2. Main program
-This routine checks Goldbach's conjecture for all even numbers in an input integer interval specified by its `lower` and `upper` bounds. It first calls the sieve subroutine to identify all prime numbers from 2 to the `upper` bound. Next, it loops over even numbers in the interval, determining by comparison with the sieve array whether they satisfy the conjecture. There is the option to print the result for each number, though we do so only while trouble-shooting.
+This routine checks Goldbach's conjecture for all even numbers in an input integer interval specified by `lower` and `upper` bounds. It first calls the sieve subroutine to identify all prime numbers from 2 to the `upper` bound. Next, it loops over even numbers in the interval, determining by comparison with the sieve array whether they satisfy the conjecture. There is the option to print the result for each number, though we do so only while trouble-shooting.
 
 ```C
 int main(int argc, char** argv) {
@@ -104,6 +104,8 @@ int main(int argc, char** argv) {
     return 0;
 }
 ```
+### 3.3. Performance optimization
+
 
 ## 4. OpenMP
 
