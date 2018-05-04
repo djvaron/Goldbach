@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Goldbach')
+=======
+setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach')
 ###################################SERIAL:10^10####################################################
 #speedup plot
 rm(list=ls())
@@ -12,9 +15,10 @@ executionTime <- c(63.6211,
 problemSize <- c(1,2,4,8,16,32)
 speedup <- executionTime_v0[1]/executionTime_v0
 plot(numThreads,speedup,type = "p",
-     xlab = "Number of Threads", ylab = "Speedup", main = "Problem Size: 10^{10}"
+     xlab = "Number of Threads", ylab = "Speedup", main = "Speedup with Increasing OpenMP Threads",
      pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
 dev.off()
+>>>>>>> 64dd5bf0cc1486fd898ee5a35cd045b51b871e71
 ###################################OMP:10^10####################################################
 #speedup plot
 rm(list=ls())
@@ -93,8 +97,7 @@ unoptimizedParallel <- c(2.03827,
                          NA)
 A <- c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 problemSize <- c(10^A)
-plot(problemSize,serialTime,type = 'p', log ='x', col = "black", pch = 16, 
-     ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times",axes = F)
+plot(problemSize,serialTime,type = 'p', log ='x', col = "black", pch = 16, ylab = "Execution Time [s]", xlab = "Problem Size", axes = F)
 points(problemSize,parallelTime,type = 'p', col = "blue", pch =17)
 points(problemSize,unoptimizedParallel, type = "p", col ="red", pch =15)
 axis(1,at = problemSize, labels = NULL)
