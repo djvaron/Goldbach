@@ -17,6 +17,7 @@ plot(numThreads,speedup,type = "p",
 dev.off()
 ###################################OMP:10^10####################################################
 #speedup plot
+library(latex2exp)
 rm(list=ls())
 png('omp_speedup_10.png',width = 6, height = 6, units = 'in', res = 300)
 executionTime_v0 <- c(63.6211,
@@ -28,8 +29,10 @@ executionTime_v0 <- c(63.6211,
 numThreads <- c(1,2,4,8,16,32)
 speedup <- executionTime_v0[1]/executionTime_v0
 plot(numThreads,speedup,type = "p",
-     xlab = "Number of Threads", ylab = "Speedup", main = "Speedup with Increasing OpenMP Threads",
-     pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
+     xlab = "Number of Threads", ylab = "Speedup",main = TeX("Problem Size $10^{10}$"),
+     pch = 15,axes = F, ylim = c(1,2))
+axis(1,at = numThreads, labels = NULL)
+axis(2,at = seq(1,2,by= .25),labels = NULL)
 dev.off()
 #####################################OMP:10^9####################################################
 png('omp_speedup_9.png',width = 6, height = 6, units = 'in', res = 300)
@@ -89,7 +92,7 @@ unoptimizedParallel <- c(2.03827,
                          2.33071,
                          4.79394,
                          33.8034,
-                         NA,
+                         63.2296,
                          NA)
 A <- c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 problemSize <- c(10^A)
