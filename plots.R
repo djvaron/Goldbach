@@ -14,14 +14,8 @@ points(problemSize, executionTime, type = 'p', col = "blue", pch =17)
 legend("topleft", legend = c("No flag","-O3 flag"), pch = c(15,17), bty = "n", col = c('black' ,'blue'))
 dev.off()
 ###################################OMP:10^10####################################################
-<<<<<<< HEAD
 #speedup plot
 library(latex2exp)
-||||||| merged common ancestors
-#speedup plot
-=======
-#speedup plot 
->>>>>>> 16d79cba80a7478c7de09409373e81efdd18344b
 rm(list=ls())
 png('omp_speedup_10.png',width = 6, height = 6, units = 'in', res = 300)
 executionTime_v0 <- c(63.6211,
@@ -101,7 +95,7 @@ unoptimizedParallel <- c(2.03827,
 A <- c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 problemSize <- c(10^A)
 plot(problemSize,serialTime,type = 'p', log ='x', col = "black", pch = 16, 
-     ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times",axes = F)
+     ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times versus Problem Size",axes = F, ylim = c(0,100))
 points(problemSize,parallelTime,type = 'p', col = "blue", pch =17)
 points(problemSize,unoptimizedParallel, type = "p", col ="red", pch =15)
 axis(1,at = problemSize, labels = NULL)
