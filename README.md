@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
 }
 ```
 ### 3.3. Performance optimization
-
+![serial_perf](/FIGURES/serial_times_10.png)
 
 ## 4. OpenMP
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="500" alt="OPENMP">
