@@ -1,4 +1,4 @@
-setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach')
+setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Goldbach')
 ###################################OMP:10^10####################################################
 #speedup plot
 rm(list=ls())
