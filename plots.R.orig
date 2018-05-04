@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach')
+=======
 setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Goldbach')
+>>>>>>> 4fb6c6f744822305f7ed98afa9fa6d855df0fd82
 ###################################SERIAL:10^10####################################################
 #speedup plot
 rm(list=ls())
@@ -24,6 +28,7 @@ speedup <- executionTime_v0[1]/executionTime_v0
 plot(numThreads,speedup,type = "p",
      xlab = "Number of Threads", ylab = "Speedup", main = "Problem Size: 10^{10}"
      pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
+>>>>>>> 4fb6c6f744822305f7ed98afa9fa6d855df0fd82
 dev.off()
 ###################################OMP:10^10####################################################
 #speedup plot 

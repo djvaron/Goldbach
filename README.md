@@ -108,10 +108,12 @@ int main(int argc, char** argv) {
 
 
 ## 4. OpenMP
+<img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="500" alt="OPENMP">
 
 ## 5. MPI
 
 ## 6. OpenACC
+<img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="500" alt="OPENACC">
 
 ## 7. Hybrid MPI-OpenMP
 
