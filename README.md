@@ -105,17 +105,19 @@ int main(int argc, char** argv) {
 }
 ```
 ### 3.3. Performance optimization
-<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="serial">
+
 
 ## 4. OpenMP
-We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated Fig. [OPENMP].  
-<img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="500" alt="OPENMP">
+We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
+<img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
+
 
 ## 5. MPI
 
 ## 6. OpenACC
-<img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="500" alt="OPENACC">
-
+<img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
+The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10^8. We think that [insert reasoning why]. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10^8 problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
+The optimized parallel code 
 ## 7. Hybrid MPI-OpenMP
 
 ## 8. Hybrid ???-OpenACC
