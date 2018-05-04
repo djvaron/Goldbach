@@ -4,11 +4,11 @@
 #include <math.h>
 #include "omp.h"
 #include "openacc.h"
-#include "stdbool.h"
-bool * sieve(int limit){
+
+int * sieve(int limit){
     
     unsigned int i,j;
-    bool *primes;
+    int *primes;
 
     primes = malloc(sizeof(int) * limit);
  #pragma acc parallel copy(primes[0:limit])
@@ -49,13 +49,11 @@ int main(int argc, char** argv) {
 
   //  clock_t begin = clock();
     double begin = omp_get_wtime();
-    bool * primes = sieve(upper);
+    int * primes = sieve(upper);
     int jar = 0;    
-#pragma acc data copyin(primes[0:upper])  
+#pragma acc parallel copyin(primes[0:upper]) private(jar)
 {
-#pragma acc region
-{
-#pragma acc loop private(jar) gang(100), vector(256)
+#pragma acc loop 
     for (n = lower; n <= upper; n += 2) {
         count = 0;
 	for (i = 2; i <= n/2; i++) {
@@ -71,7 +69,7 @@ int main(int argc, char** argv) {
 	}
     }
 }
-}
+
    double time_spent = omp_get_wtime() - begin;
 //    clock_t end = clock();
 //    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
