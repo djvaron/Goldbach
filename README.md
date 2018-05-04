@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
 }
 ```
 ### 3.3. Performance optimization
-
+<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="OPENACC">
 
 ## 4. OpenMP
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
@@ -113,6 +113,8 @@ We implemented OpenMP and parallelized our code across 1 to 32 threads on [type 
 
 
 ## 5. MPI
+<img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
+
 
 ## 6. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
@@ -122,6 +124,7 @@ We implemented OpenMP and parallelized our code across 1 to 32 threads on [type 
   The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The default thread count is 128 threads. When we increase the thread count by distributing the work among gangs and which then distributes threads within each gang. Because the problem is embarrassingly parallel, we see a substantial increase in performance as seen by the blue triangles (gang/vector distributed work) versus red squares (unoptimized).
 
 ## 7. Hybrid MPI-OpenMP
+<img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="OPENACC">
 
 ## 8. Hybrid ???-OpenACC
 
