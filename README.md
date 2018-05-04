@@ -108,6 +108,7 @@ int main(int argc, char** argv) {
 
 
 ## 4. OpenMP
+We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated Fig. [OPENMP].  
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="500" alt="OPENMP">
 
 ## 5. MPI
