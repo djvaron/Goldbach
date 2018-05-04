@@ -1,26 +1,19 @@
-<<<<<<< HEAD
-setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Goldbach')
-=======
 setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach')
 ###################################SERIAL:10^10####################################################
 #speedup plot
 rm(list=ls())
 png('serial_times_10.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime <- c(63.6211,
-                   46.5893,
-                   46.6875,
-                   43.0204,
-                   41.9105,
-                   35.9967)
-problemSize <- c(1,2,4,8,16,32)
-speedup <- executionTime_v0[1]/executionTime_v0
-plot(numThreads,speedup,type = "p",
-     xlab = "Number of Threads", ylab = "Speedup", main = "Speedup with Increasing OpenMP Threads",
-     pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
+executionTime <- c(0,0.01,0.23,3.31,41.01,59.63)
+executionTimeNoFlag <- c(0,0.04,0.98,12.56,148.42,214.81)
+problemSize <- c(5,6,7,8,9,10)
+problemSize <- 10^problemSize
+plot(problemSize,executionTimeNoFlag,type = "p",
+     xlab = "Problem size", ylab = "Execution time [s]", main = "Serial execution time versus problem size",
+     pch = 15, log='x')
+points(problemSize, executionTime, type = 'p', col = "blue", pch =17)
 dev.off()
->>>>>>> 64dd5bf0cc1486fd898ee5a35cd045b51b871e71
 ###################################OMP:10^10####################################################
-#speedup plot
+#speedup plot 
 rm(list=ls())
 png('omp_speedup_10.png',width = 6, height = 6, units = 'in', res = 300)
 executionTime_v0 <- c(63.6211,
