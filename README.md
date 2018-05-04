@@ -105,8 +105,8 @@ int main(int argc, char** argv) {
 }
 ```
 ### 3.3. Performance optimization
-<img src="https://github.com/ardwwa/Goldbach/blob/master/profiling.png" width="600" alt="OPENACC">
-
+<img src="https://github.com/ardwwa/Goldbach/blob/master/profiling.png" width="600" alt="OPENACC"/>
+<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="serial times 10"/>
 ## 4. OpenMP
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
