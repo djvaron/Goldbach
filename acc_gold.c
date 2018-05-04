@@ -4,30 +4,28 @@
 #include <math.h>
 #include "omp.h"
 #include "openacc.h"
-#include "stdbool.h"
-bool * sieve(int limit){
+
+int * sieve(int limit){
     
     unsigned int i,j;
-    bool *primes;
+    int *primes;
 
     primes = malloc(sizeof(int) * limit);
- #pragma acc parallel copy(primes[0:limit]), vector_length(1024)
-{ 
-#pragma acc loop vector
-for (i = 2; i < limit; i++)
+ #pragma acc parallel copy(primes[0:limit])
+ for (i = 2; i < limit; i++)
         primes[i] = 1;
-}
+
  int n = floor(pow(limit,0.5));
 #pragma acc data copyin(primes[0:limit])
 {
 #pragma acc region
 {
-#pragma acc loop independent vector(1024) 
+#pragma acc loop independent gang(50), vector(256) 
 for (i = 2; i < n; i++)
      // If prime[i] is not changed, then it is a prime
      if (primes[i]) {
          // Update all multiples of i
-	  #pragma acc loop independent vector(2048)
+	  #pragma acc loop independent gang(100), vector(2048)
          for ( j = 2*i; j < limit; j += i)
              primes[j] = 0;
      }
@@ -51,13 +49,11 @@ int main(int argc, char** argv) {
 
   //  clock_t begin = clock();
     double begin = omp_get_wtime();
-    bool * primes = sieve(upper);
+    int * primes = sieve(upper);
     int jar = 0;    
-#pragma acc data copyin(primes[0:upper])  
+#pragma acc parallel copyin(primes[0:upper]) private(jar)
 {
-#pragma acc region
-{
-#pragma acc loop private(jar) gang(100), vector(256)
+#pragma acc loop 
     for (n = lower; n <= upper; n += 2) {
         count = 0;
 	for (i = 2; i <= n/2; i++) {
@@ -73,7 +69,7 @@ int main(int argc, char** argv) {
 	}
     }
 }
-}
+
    double time_spent = omp_get_wtime() - begin;
 //    clock_t end = clock();
 //    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
