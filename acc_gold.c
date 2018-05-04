@@ -11,21 +11,23 @@ bool * sieve(int limit){
     bool *primes;
 
     primes = malloc(sizeof(int) * limit);
- #pragma acc parallel copy(primes[0:limit])
- for (i = 2; i < limit; i++)
+ #pragma acc parallel copy(primes[0:limit]), vector_length(1024)
+{ 
+#pragma acc loop vector
+for (i = 2; i < limit; i++)
         primes[i] = 1;
-
+}
  int n = floor(pow(limit,0.5));
 #pragma acc data copyin(primes[0:limit])
 {
 #pragma acc region
 {
-#pragma acc loop independent gang(50), vector(256) 
+#pragma acc loop independent vector(1024) 
 for (i = 2; i < n; i++)
      // If prime[i] is not changed, then it is a prime
      if (primes[i]) {
          // Update all multiples of i
-	  #pragma acc loop independent gang(100), vector(2048)
+	  #pragma acc loop independent vector(2048)
          for ( j = 2*i; j < limit; j += i)
              primes[j] = 0;
      }
