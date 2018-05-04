@@ -116,8 +116,10 @@ We implemented OpenMP and parallelized our code across 1 to 32 threads on [type 
 
 ## 6. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
-The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10^8. We think that [insert reasoning why]. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10^8 problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
-The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The default thread count is 128 threads. When we increase the thread count by distributing the work among gangs and which then distributes threads within each gang. Because the problem is embarrassingly parallel, we see a substantial increase in performance as seen by the blue triangles (gang/vector distributed work) versus red squares (unoptimized).
+
+  The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10^8. We think that [insert reasoning why]. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10^8 problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
+
+  The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The default thread count is 128 threads. When we increase the thread count by distributing the work among gangs and which then distributes threads within each gang. Because the problem is embarrassingly parallel, we see a substantial increase in performance as seen by the blue triangles (gang/vector distributed work) versus red squares (unoptimized).
 
 ## 7. Hybrid MPI-OpenMP
 
