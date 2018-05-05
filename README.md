@@ -21,7 +21,7 @@ We tested the following forms of parallelism:
   * Hybrid ???-OpenACC parallelism
 
 ## 2. System specifications
-Experiments were carried out on the Harvard Odyssey research computing cluster.
+Experiments with MPI, OpenMP and the MPI/OpenMP hybrid were carried out on the huce_intel Harvard Odyssey research computing cluster. Experiments with OpenACC were carried out on an AWS  g3.4xlarge with 16 GiB of GPU memory.  
 
 ## 3. Serial code
 The serial code `goldbach.c` consists of:
@@ -106,6 +106,10 @@ int main(int argc, char** argv) {
 ```
 ### 3.3. Performance optimization
 
+<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="serial times 10"/>
+
+<img src="https://github.com/ardwwa/Goldbach/blob/master/profiling.png" width="600" alt="OPENACC"/>
+Running a GNU gprof profiler on the serial code, we found that for a problem size greater than 10^7, our code spends more time in the sieve function than the main for loop that checks through the primes array. Therefore focusing our acceleration in the sieve is the most important for a problem size greater than 10^7. 
 
 ## 4. OpenMP
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
@@ -113,12 +117,20 @@ We implemented OpenMP and parallelized our code across 1 to 32 threads on [type 
 
 
 ## 5. MPI
+<img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
+
 
 ## 6. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
-The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10^8. We think that [insert reasoning why]. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10^8 problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
-The optimized parallel code 
+
+  The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10^8. We think that [insert reasoning why]. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10^8 problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
+
+  The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The default thread count is 128 threads. When we increase the thread count by distributing the work among gangs and which then distributes threads within each gang. Because the problem is embarrassingly parallel, we see a substantial increase in performance as seen by the blue triangles (gang/vector distributed work) versus red squares (unoptimized). The maximum thread count in the GPU is 2048 
+  
+  At 10^11, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 100 GiB and the maximum storage for the g3.4xlarge array I requested was 8GiB which I modified to 16GiB by requesting more memory. To test a number larger than 10^11, more storage on AWS could be requested.
+
 ## 7. Hybrid MPI-OpenMP
+<img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="OPENACC">
 
 ## 8. Hybrid ???-OpenACC
 
