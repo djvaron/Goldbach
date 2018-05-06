@@ -64,7 +64,7 @@ return primes;
 ```
 
 ### 3.2. Main program
-This routine checks Goldbach's conjecture for all even numbers in an input integer interval specified by `lower` and `upper` bounds. It first calls the sieve subroutine to identify all prime numbers from 2 to the `upper` bound. Next, it loops over even numbers in the interval, determining by comparison with the sieve array whether they satisfy the conjecture. There is the option to print the result for each number, though we do so only while trouble-shooting.
+This routine checks Goldbach's conjecture for all even numbers in an input integer interval specified by `lower` and `upper` bounds. It first calls the sieve subroutine to identify all prime numbers from 1 to the `upper` bound. Next, it loops over even numbers in the interval, determining by comparison with the sieve array whether they satisfy the conjecture.
 
 ```C
 int main(int argc, char** argv) {
@@ -83,6 +83,7 @@ int main(int argc, char** argv) {
         count = 0;
         for (i = 2; i <= n/2; i++) {
             if (primes[i] && primes[n-i]) {
+                /* for trouble-shooting: */
                 /* printf("TRUE %d = %d + %d\n", n, i, n-i); */
                 count = 1;
                 break;
