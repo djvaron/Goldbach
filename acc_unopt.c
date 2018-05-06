@@ -20,12 +20,12 @@ int * sieve(int limit){
 {
 #pragma acc region
 {
-#pragma acc loop independent gang(8), vector(4) 
+#pragma acc loop independent //gang(50), vector(256) 
 for (i = 2; i < n; i++)
      // If prime[i] is not changed, then it is a prime
      if (primes[i]) {
          // Update all multiples of i
-	  #pragma acc loop independent gang(4), vector(16)
+	  #pragma acc loop independent //gang(100), vector(2048)
          for ( j = 2*i; j < limit; j += i)
              primes[j] = 0;
      }
@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     int jar = 0;    
 #pragma acc parallel copyin(primes[0:upper]) private(jar)
 {
-#pragma acc loop  
+#pragma acc loop 
     for (n = lower; n <= upper; n += 2) {
         count = 0;
 	for (i = 2; i <= n/2; i++) {
