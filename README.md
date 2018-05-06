@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
 ```
 ### 3.3. Performance analysis
 
-We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `-O3` optimization flag speeds up the code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher.
+We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `-O3` optimization flag speeds up our code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher.
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="serial times 10"/>
 
@@ -119,7 +119,7 @@ We find that for problem sizes greater than 10<sup>7</sup>, our code spends more
 ## 4. OpenMP
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
-
+Problem size for our serial shared-memory parallel code is limited to 10<sup>10</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GiB RAM per core. For `limit` = 10<sup>10</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB in memory, saturating an individual node.
 
 ## 5. MPI
 <img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
