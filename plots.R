@@ -1,44 +1,4 @@
 setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Goldbach')
-###################################HYBRID_10####################################################
-#speedup plot
-rm(list=ls())
-png('hybrid_times_10.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime <- c(57.209, 32.274, 22.692, 19.632)
-numCores <- c(32, 64, 96, 128)
-plot(numCores,executionTime,type = "p",
-     xlab = "Number of cores", ylab = "Execution time [s]", main = "Hybrid MPI-OpenMP execution time vs. number of cores",
-     pch = 15, ylim = c(0,60), axes = F)
-axis(1, at = numCores, labels = NULL)
-axis(2, at = seq(0,60,by=10), labels = NULL)
-legend("topright", legend=c("Problem size 1e+10"), pch = c(15), bty = "n", col = c('black'))
-dev.off()
-###################################MPI:v1v2####################################################
-#speedup plot
-rm(list=ls())
-png('mpi_v1v2.png',width = 6, height = 6, units = 'in', res = 300)
-executionTimeV1 <- c(57.823,45.552,56.347,65.677,99.515,169.731)
-executionTimeV2 <- c(49.627,40.191,31.114,30.882,30.508,29.534)
-numCores <- c(1,2,4,8,16,32)
-plot(numCores,executionTimeV1,type = "p",
-     xlab = "Number of cores", ylab = "Execution time [s]", main = "MPI execution time versus number of cores: 1e+10",
-     pch = 15, ylim = c(0,200), axes = F)
-points(numCores, executionTimeV2, type = 'p', col = "blue", pch =17)
-axis(1, at = numCores, labels = NULL)
-axis(2, at = seq(0,200,by=20), labels = NULL)
-legend("topleft", legend = c("Version 1: sieve shared via MPI_Send","Version 2: independent sieve construction"), pch = c(15,17), bty = "n", col = c('black' ,'blue'))
-dev.off()
-###################################HYBRID_10####################################################
-#speedup plot
-rm(list=ls())
-png('hybrid_times_10.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime <- c(57.209, 32.274, 22.692, 19.632)
-numCores <- c(32, 64, 96, 128)
-plot(numCores,executionTime,type = "p",
-     xlab = "Number of cores", ylab = "Execution time [s]", main = "Hybrid MPI-OpenMP execution time versus number of cores: 1e+10",
-     pch = 15, ylim = c(0,200), axes = F)
-axis(1, at = numCores, labels = NULL)
-axis(2, at = seq(0,60,by=10), labels = NULL)
-dev.off()
 ###################################SERIAL:10^10####################################################
 #speedup plot
 rm(list=ls())
@@ -136,10 +96,10 @@ plot(problemSize,serialTime,type = 'p', log ='x', col = "black", pch = 16,
      ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times versus Problem Size",axes = F, ylim = c(0,100))
 points(problemSize, parallelTime,type = 'p', col = "blue", pch =17)
 points(problemSize, unoptimizedParallel, type = "p", col ="red", pch =15)
-points(problemSize)
+points(problemSize, ompTime, type = "p", col = "green", pch=18)
 axis(1, at = problemSize, labels = NULL)
 axis(2, at = seq(0,100,by= 10),labels = NULL)
-legend("topleft", legend = c("serial","optimized parallel", "parallel"), pch = c(16,17,15), bty = "n", col = c('black' ,'blue','red'))
+legend("topleft", legend = c("serial","optimized parallel", "parallel","omp"), pch = c(16,17,15,18), bty = "n", col = c('black' ,'blue','red','green'))
 dev.off()
 ##########################################profiling#################################################
 rm(list=ls())
