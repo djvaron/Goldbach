@@ -21,7 +21,7 @@ We tested the following forms of parallelism:
   * Hybrid ???-OpenACC parallelism
 
 ## 2. System specifications
-Experiments with MPI, OpenMP and the MPI/OpenMP hybrid were carried out on the huce_intel Harvard Odyssey research computing cluster. Experiments with OpenACC were carried out on an AWS  g3.4xlarge with 16 GiB of GPU memory.  
+Experiments with MPI, OpenMP and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were carried out on an AWS g3.4xlarge instance with 16 GiB of GPU memory.  
 
 ## 3. Serial code
 The serial code `goldbach.c` consists of:
