@@ -21,7 +21,7 @@ We tested the following forms of parallelism:
   * Hybrid ???-OpenACC parallelism
 
 ## 2. System specifications
-Experiments with MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a g3.4xlarge instance with 16 GiB of GPU memory.  
+Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a g3.4xlarge instance with 16 GiB of GPU memory.  
 
 ## 3. Serial code
 The serial code `goldbach.c` consists of:
@@ -105,12 +105,16 @@ int main(int argc, char** argv) {
     return 0;
 }
 ```
-### 3.3. Performance optimization
+### 3.3. Performance analysis
+
+We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `-O3` optimization flag speeds up the code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher.
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="serial times 10"/>
 
+To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler:
+
 <img src="https://github.com/ardwwa/Goldbach/blob/master/profiling.png" width="600" alt="OPENACC"/>
-Running a GNU gprof profiler on the serial code, we found that for a problem size greater than 10^7, our code spends more time in the sieve function than the main for loop that checks through the primes array. Therefore focusing our acceleration in the sieve is the most important for a problem size greater than 10^7. 
+We find that for problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Therefore, focusing our acceleration in the sieve is the most important for a problem size greater than 10^7. 
 
 ## 4. OpenMP
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
