@@ -62,15 +62,16 @@ plot(numThreads,speedup,type = "p",
 dev.off()
 #################################ACC:PROBLEM SIZE VARIABLE########################################
 png('acc_speedup.png', width = 6, height = 6, units = "in", res = 300)
-parallelTime <- c(2.12186,
-                  2.05815,
-                  2.05366,
-                  2.01458,
-                  2.06065,
-                  2.13231,
-                  2.83341,
-                  9.38933,
-                  12.3877)
+ompTime <- c(0.00525689,0.00236297,0.00329614,0.00849891,0.0652399,0.683365,7.18525,76.5511,NA)
+parallelTime <- c(1.74985,
+                  2.02367,
+                  2.02737,
+                  2.00916,
+                  2.02869,
+                  2.09398,
+                  2.57734,
+                  8.01155,
+                  10.4567)
 serialTime <- c(4.20E-05,
                 4.40E-05,
                 0.000152,
@@ -95,6 +96,7 @@ plot(problemSize,serialTime,type = 'p', log ='x', col = "black", pch = 16,
      ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times versus Problem Size",axes = F, ylim = c(0,100))
 points(problemSize, parallelTime,type = 'p', col = "blue", pch =17)
 points(problemSize, unoptimizedParallel, type = "p", col ="red", pch =15)
+points(problemSize)
 axis(1, at = problemSize, labels = NULL)
 axis(2, at = seq(0,100,by= 10),labels = NULL)
 legend("topleft", legend = c("serial","optimized parallel", "parallel"), pch = c(16,17,15), bty = "n", col = c('black' ,'blue','red'))
@@ -112,8 +114,8 @@ DF1 <- melt(df, id.var="problemSize")
 library(ggplot2)
 ggplot(DF1, aes(x = problemSize, y = value,fill=variable)) +
   geom_bar(stat='identity')+
-  ggtitle(TeX("Function Percentage with $10^n$"))+
-  theme(plot.title = element_text(hjust = 0.5))+
+  ggtitle(TeX("Function Percentage with $10^n$")) +
+  theme(plot.title = element_text(hjust = 0.5)) +
   ylab("%")+xlab("n")+ theme_classic()+theme(legend.title=element_blank())
 dev.off()
 
