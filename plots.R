@@ -6,10 +6,11 @@ png('hybrid_times_10.png',width = 6, height = 6, units = 'in', res = 300)
 executionTime <- c(57.209, 32.274, 22.692, 19.632)
 numCores <- c(32, 64, 96, 128)
 plot(numCores,executionTime,type = "p",
-     xlab = "Number of cores", ylab = "Execution time [s]", main = "Hybrid MPI-OpenMP execution time versus number of cores: 1e+10",
-     pch = 15, ylim = c(0,200), axes = F)
+     xlab = "Number of cores", ylab = "Execution time [s]", main = "Hybrid MPI-OpenMP execution time vs. number of cores",
+     pch = 15, ylim = c(0,60), axes = F)
 axis(1, at = numCores, labels = NULL)
 axis(2, at = seq(0,60,by=10), labels = NULL)
+legend("topright", legend=c("Problem size 1e+10"), pch = c(15), bty = "n", col = c('black'))
 dev.off()
 ###################################MPI:v1v2####################################################
 #speedup plot
