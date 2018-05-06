@@ -109,6 +109,8 @@ int main(int argc, char** argv) {
 
 We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `-O3` optimization flag speeds up our code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher.
 
+
+
 <img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="serial times 10"/>
 
 To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler:
