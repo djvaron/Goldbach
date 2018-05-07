@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
 ```
 ### 3.3. Performance analysis
 
-We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `-O3` optimization flag speeds up our code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher. We therefore use `-O3` optimization for all our parallel implementations.
+We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `-O3` optimization flag speeds up our code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher. We therefore use `O3` optimization for all our parallel implementations.
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="SERIAL"/>
 
@@ -124,12 +124,11 @@ There are at least two possible approaches to overcoming this memory limitation:
 
 Neither of these approaches seems very promising, however, because passing large arrays between nodes is costly (see Sect. 5), as is loading them from disk space. We leave direct testing of these two options to a future work, limiting our analysis here to the interval {1 .. 10<sup>11</sup>}.
 
-To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler, and plotted the fractions of execution time spent on the Eratosthenes sieve and verification loop versus problem size:
+To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler and plotted the fractions of execution time spent on the Eratosthenes sieve and verification loop versus problem size:
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/profiling.png" width="600" alt="OPENACC"/>
 
 For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
-
 
 ## 4. OpenMP
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
