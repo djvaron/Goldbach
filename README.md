@@ -111,18 +111,19 @@ We find that the computational cost of verifying Goldbach's conjecture using our
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="SERIAL"/>
 
-Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GiB RAM per core, for a total of 128 GiB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB in memory, saturating random access memory on an individual node.
+Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GiB RAM per core, for a total of 128 GiB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB, saturating random access memory on an individual node.
 
 There are at least two possible approaches to overcoming this memory limitation:
   1. Store the sieve array across multiple nodes and communicate the different parts via MPI.
   2. Store the sieve in disk space.
 
-Neither of these approaches seems very promising, because passing large arrays between nodes is costly (see Sect. 5), as is loading them from disk space. We leave direct testing of these two approaches to future work, limiting our analysis in this work to the interval {1 .. 10<sup>11</sup>}.
+Neither of these approaches seems very promising, however, because passing large arrays between nodes is costly (see Sect. 5), as is loading them from disk space. We leave direct testing of these two options to future work, limiting our analysis here to the interval {1 .. 10<sup>11</sup>}.
 
-To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler:
+To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler, and plotted the fractions of execution time spent on the Eratosthenes sieve and verification loop versus problem size:
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/profiling.png" width="600" alt="OPENACC"/>
-We find that for problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Therefore, focusing our acceleration in the sieve is the most important for a problem size greater than 10^7. 
+
+For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, parallelizing the sieve should produce the most benefit for problem sizes greater than 10<sup>7</sup>. 
 
 ## 4. OpenMP
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
