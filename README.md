@@ -151,10 +151,9 @@ Problem size for our serial shared-memory parallel code is limited to 10<sup>10<
 
 ## 8. Conclusions
 Future steps:
-  * store sieve array in long memory to increase problem size limit
-  * construct and store sieve array across several nodes to scale parallelism to increased problem sizes
-  * Hybrid with OpenACC?
-  * figure out what is wrong with serial code...
+  * store sieve array in disk space to increase problem size limit.
+  * construct and store sieve array across several nodes to increase problem size limit.
+  * Hybrid with OpenACC.
 
 ## References
   * Oliveria e Silva, T., Herzog, S., and Pardi, S.: Empirical verification of the even Goldbach conjecture and computation of prime gaps up to 4&times;10<sup>18</sup>. _Math. Comput._, 83(288), 2033-2060, [https://doi.org/10.1090/S0025-5718-2013-02787-1](https://doi.org/10.1090/S0025-5718-2013-02787-1), 2014.
