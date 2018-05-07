@@ -123,7 +123,8 @@ To better understand how cost scales with problem size, we profiled our code usi
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/profiling.png" width="600" alt="OPENACC"/>
 
-For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, parallelizing the sieve should produce the most benefit for large problem sizes. 
+For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
+
 
 ## 4. OpenMP
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
