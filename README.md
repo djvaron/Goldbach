@@ -25,7 +25,7 @@ Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conduc
 ## 3. Serial code
 The serial code `goldbach.c` consists of:
   1. an Eratosthenes sieve subroutine for finding all the prime numbers in an input integer interval, and 
-  2. a main program for verifying Goldbach's conjecture for even numbers in the input interval.
+  2. a loop for verifying Goldbach's conjecture for even numbers in the input interval.
 
 Example of vanilla compile &amp; run commands: 
   * compile: `gcc goldbach.c -o goldbach`
@@ -62,7 +62,7 @@ return primes;
 }
 ```
 
-### 3.2. Main program
+### 3.2. Verification loop
 This routine checks Goldbach's conjecture for all even numbers in an input integer interval specified by `lower` and `upper` bounds. It first calls the sieve subroutine to identify all prime numbers from 1 to the `upper` bound. Next, it loops over even numbers in the interval, determining by comparison with the sieve array whether they satisfy the conjecture.
 
 ```C
@@ -151,6 +151,10 @@ In the second MPI approach, each process constructs its own sieve array before w
 #### Comparison
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
+
+Explain...
+
+Our decision to forego multi-node assembly and storage of the Eratosthenes sieve array in this work (see Sect. 3.3) imposes a key limitation on the performance boosts distributed memory parallelism can provide. Parallelizing the sieve subroutine is desirable because for large problem sizes it accounts for most of the execution time. The best we can do at this point is to apply shared memory parallelism to assembly of the sieve array, and distributed memory parallelism to the verification loop.
 
 ## 6. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
