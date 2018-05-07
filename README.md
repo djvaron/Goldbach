@@ -174,7 +174,7 @@ We see that the decision to forego multi-node assembly and storage of the Eratos
   At 10^11, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 100 GiB and the maximum storage for the g3.4xlarge array I requested was 8GiB which I modified to 16GiB by requesting more memory. To test a number larger than 10^11, a multi-node code with MPI-ACC across more than one GPU could be developed.
 
 ## 7. Hybrid MPI-OpenMP
-<img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="OPENACC">
+<img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="HYBRID">
 
 ## 8. Conclusions
 Future steps:
