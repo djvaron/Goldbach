@@ -34,17 +34,17 @@ int main(int argc, char** argv) {
     
     int lower, count;
     long long int upper, i, n;     
-    //lower = atoi(argv[1]);
-    //upper = atoi(argv[2]);
-    lower = 4; upper = 2500000000;  
+    lower = atoi(argv[1]);
+    upper = atoi(argv[2]);
+//    lower = 4; upper = 2500000000;  
 
-    printf("lower = %d, upper = %lli \n",lower,upper);
+//    printf("lower = %d, upper = %lli \n",lower,upper);
 
     clock_t begin = clock();
 
     bool * primes = sieve(upper);    
-    printf("size of B[0]: %d \n", sizeof(primes[0]));    
-    printf("bits for long long integer: %d\n", 8*sizeof(long long int));
+//    printf("size of B[0]: %d \n", sizeof(primes[0]));    
+//    printf("bits for long long integer: %d\n", 8*sizeof(long long int));
  
     for (n = lower; n <= upper; n += 2) {
         count = 0;
@@ -56,14 +56,14 @@ int main(int argc, char** argv) {
 	    }
         }
         if (count == 0) {
-	    printf("FALSE %d", n);
+//	    printf("FALSE %d", n);
 	}
     }
   
     clock_t end = clock();
     
-    printf("checked: %lli \n", n);
-    printf("time spent: %.5g seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
+//    printf("checked: %lli \n", n);
+//    printf("time spent: %.5g seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
 
     free(primes);
 
