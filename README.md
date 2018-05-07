@@ -140,14 +140,14 @@ Problem size for our serial shared-memory parallel code is limited to 10<sup>10<
 We explored two MPI implementations of our code. 
 
 #### Approach 1
-In the first, the master process constructs the Eratosthenes sieve array before sharing it with worker processes via `MPI_Send()`. The verification loop iterations are distributed among workers from there. It is important to distribute the work equally, because otherwise execution time will be limited by the slowest process. Block partitioning of the input integer interval into sequential sub-intervals is not a viable way to distribute the labor, since large numbers (with more possible prime components) take longer to process than small numbers. Instead, we assign integers to each worker process cyclically. For example, if there are 4 workers processing the integer interval {4 .. 20}, work is assigned as follows:
+In the first approach, the master process constructs the Eratosthenes sieve array before sharing it with worker processes via `MPI_Send()`. The verification loop iterations are distributed among workers from there. It is important to distribute the work equally, because otherwise execution time will be limited by the slowest process. Block partitioning of the input integer interval into sequential sub-intervals is not a viable way to distribute labor, since large numbers (with more possible prime components) take longer to process than small numbers. Instead, we assign integers to each worker process cyclically. For example, if there are 4 workers processing the integer interval {4 .. 20}, work is assigned as follows:
   * worker 0 processes [4, 12, 20]. 
   * worker 1 processes [6, 14].
   * worker 2 processes [8, 16].
   * worker 3 processes [10, 18].
 
 This approach has two major weaknesses: 
-  1. First, it does not parallelize construction of the Eratosthenes sieve array, which accounts for most of the execution time for large problem sizes. 
+  1. First, it does not parallelize the Eratosthenes sieve, which accounts for most of the execution time for large problem sizes. 
   2. Second, it requires that large arrays (up to 10-100 GiB) be passed via `MPI_Send()`, which is costly.
 
 #### Approach 2
@@ -159,7 +159,7 @@ In the second MPI approach, each process constructs its own sieve array before w
 
 Explain...
 
-Our decision to forego multi-node assembly and storage of the Eratosthenes sieve array in this work (see Sect. 3.3) imposes a key limitation on the performance boosts that distributed memory parallelism can provide. Parallelizing the sieve subroutine is desirable because, as shown in Sect. 3.3, it accounts for most of the execution time when the problem size is large. At this stage in our project, the best we can do is to apply shared memory parallelism to assembly of the sieve array, and distributed memory parallelism to the verification loop.
+Our decision to forego multi-node assembly and storage of the Eratosthenes sieve array in this work (see Sect. 3.3) imposes a key limitation on the performance gains that distributed memory parallelism can provide. Parallelizing the sieve subroutine is desirable because, as shown in Sect. 3.3, it accounts for most of the execution time for large problem sizes. At this stage in our project, the best we can do is to apply shared memory parallelism to the Eratosthenes sieve, and distributed memory parallelism to the verification loop.
 
 ## 6. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
