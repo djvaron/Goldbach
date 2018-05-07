@@ -180,13 +180,17 @@ We compare execution times for different problem sizes and numbers of processors
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="HYBRID">
 
-This approach scales better than the OpenMP and MPI approaches discussed in Sect. 4 and 5. With 128 processors across 4 compute nodes we are able to verify Goldbach's conjecture for even numbers up to 10<sup>11</sup>.
+This approach scales better than the OpenMP and MPI approaches discussed in Sect. 4 and 5. With 128 processors across 4 compute nodes we are able to verify Goldbach's conjecture for even numbers up to 10<sup>11</sup> in a reasonable amount of time (approximately 21 minutes). 
 
 ## 8. Conclusions
-Future steps:
-  * store sieve array in disk space to increase problem size limit.
-  * construct and store sieve array across several nodes to increase problem size limit.
-  * Hybrid with OpenACC.
+
+  * OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).
+  * Problem size is limited by the size of the Eratosthenes sieve array.
+  * If we want to solve larger problems, we need to find a new way to store the sieve array, because it quickly grows too large to be stored in RAM on a single `huce_intel` compute node. We have at least two options, neither of which is ideal:
+    1. store sieve array in disk space (I/O bottleneck).
+    2. store sieve array across several (added costs from MPI communication of array segments).
+  * If we want to speed up our code for larger problem sizes, we need to increase parallelism of the Eratosthenes sieve. That means developing an MPI implementation that constructs the sieve across several nodes. This fits will with option 2 above. 
+  * Probably the best possible approach is to use a massive MPI algorithm that uses a large number of nodes to construct the sieve array in parallel and then distribute the verification loop iterations to many workers. It's unclear whether the best implementation would be MPI-only, hybrid MPI-OpenMP, or hybrid MPI-OpenACC, since we don't know how the problem scales when the sieve array is distributed across several nodes. 
 
 ## References
   * Oliveria e Silva, T., Herzog, S., and Pardi, S.: Empirical verification of the even Goldbach conjecture and computation of prime gaps up to 4&times;10<sup>18</sup>. _Math. Comput._, 83(288), 2033-2060, [https://doi.org/10.1090/S0025-5718-2013-02787-1](https://doi.org/10.1090/S0025-5718-2013-02787-1), 2014.
