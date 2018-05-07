@@ -1,30 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "time.h"
-#include <math.h>
+#include "stdbool.h"
 #include "omp.h"
-int * sieve(int limit){
+
+bool * sieve(long long int limit){
     
     unsigned int i,j;
-    int *primes;
+    bool *primes;
 
-    primes = malloc(sizeof(int) * limit);
- #pragma omp parallel for schedule(static)
- for (i = 2; i < limit; i++)
+
+    primes = calloc(limit, sizeof(bool));
+#pragma omp parallel for 
+    for (i = 2; i < limit; i++)
         primes[i] = 1;
-
- int n = floor(pow(limit,0.5));
- #pragma omp parallel for schedule(dynamic)
- for (i = 2; i < n; i++)
-     // If prime[i] is not changed, then it is a prime
-     if (primes[i]) {
-         // Update all multiples of i
-	 #pragma omp parallel for 
-         for ( j = 2*i; j < limit; j += i)
-             primes[j] = 0;
-     }
-
-/* printf("\nPrime numbers in range 1 to %d are: \n", limit);
+#pragma omp parallel for schedule(dynamic)
+    for (i = 2; i*i < limit; i++)
+        // If prime[i] is not changed, then it is a prime
+        if (primes[i]) {
+            // Update all multiples of i
+#pragma omp parallel for 
+            for ( j = 2*i; j < limit; j += i)
+                primes[j] = 0;
+        }
+    
+    /* printf("\nPrime numbers in range 1 to %d are: \n", limit);
     for (i = 2; i < limit; i++){
         if (primes[i])
             printf("%d\n", i);
@@ -36,14 +36,20 @@ return primes;
 
 int main(int argc, char** argv) {
     
-    int lower, upper, count, i, n;    
+    int lower, count;
+    long long int upper, i, n;     
     lower = atoi(argv[1]);
     upper = atoi(argv[2]);
+//    lower = 4; upper = 2500000000;  
 
-  //  clock_t begin = clock();
-    double begin = omp_get_wtime();
-    int * primes = sieve(upper);    
-   #pragma omp parallel for schedule(dynamic)
+//    printf("lower = %d, upper = %lli \n",lower,upper);
+
+    clock_t begin = clock();
+
+    bool * primes = sieve(upper);    
+//    printf("size of B[0]: %d \n", sizeof(primes[0]));    
+//    printf("bits for long long integer: %d\n", 8*sizeof(long long int));
+ #pragma omp parallel for schedul(dynamic)
     for (n = lower; n <= upper; n += 2) {
         count = 0;
 	for (i = 2; i <= n/2; i++) {
@@ -54,15 +60,16 @@ int main(int argc, char** argv) {
 	    }
         }
         if (count == 0) {
-	    printf("FALSE %d", n);
+//	    printf("FALSE %d", n);
 	}
     }
-   double time_spent = omp_get_wtime() - begin;
-//    clock_t end = clock();
-//    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;    
-    printf("time spent: %g seconds\n",time_spent);
+  
+    clock_t end = clock();
+    
+//    printf("checked: %lli \n", n);
+//    printf("time spent: %.5g seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
 
-    free(primes), primes = NULL;
+    free(primes);
 
     return 0;
 
