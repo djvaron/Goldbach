@@ -3,14 +3,18 @@ setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Gol
 #speedup plot
 rm(list=ls())
 png('serial_times_10.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime <- c(0,0.01,0.23,3.31,41.01,59.63)
-executionTimeNoFlag <- c(0,0.04,0.98,12.56,148.42,214.81)
+executionTime <- c(0.001,0.01,0.23,3.31,41.01,612.71)
+executionTimeNoFlag <- c(0.004,0.04,0.98,12.56,148.42)
 problemSize <- c(5,6,7,8,9,10)
 problemSize <- 10^problemSize
-plot(problemSize,executionTimeNoFlag,type = "p",
+problemSizeNoFlag <- c(10^5, 10^6, 10^7, 10^8, 10^9)
+plot(problemSize,executionTime,type = "p",
      xlab = "Problem size", ylab = "Execution time [s]", main = "Serial execution time versus problem size",
-     pch = 15, log='x')
-points(problemSize, executionTime, type = 'p', col = "blue", pch =17)
+     pch = 15, log='xy', axes=F)
+points(problemSizeNoFlag, executionTimeNoFlag, type = 'p', col = "blue", pch =17)
+axis(1, at = problemSize, labels = NULL)
+ey <- -3:3 ; aty <- 10^ey
+axis(2, at = aty, labels = NULL)
 legend("topleft", legend = c("No flag","-O3 flag"), pch = c(15,17), bty = "n", col = c('black' ,'blue'))
 dev.off()
 ###################################OMP:10^10####################################################
@@ -135,8 +139,8 @@ dev.off()
 #speedup plot
 rm(list=ls())
 png('mpi_v1v2.png',width = 6, height = 6, units = 'in', res = 300)
-executionTimeV1 <- c(57.823,45.552,56.347,65.677,99.515,169.731)
-executionTimeV2 <- c(49.627,40.191,31.114,30.882,30.508,29.534)
+executionTimeV1 <- c(38.930, 32.608, 36.284, 43.521, 65.745, 158.846)
+executionTimeV2 <- c()
 numCores <- c(1,2,4,8,16,32)
 plot(numCores,executionTimeV1,type = "p",
      xlab = "Number of cores", ylab = "Execution time [s]", main = "MPI execution time versus number of cores: 1e+10",
