@@ -132,8 +132,15 @@ We implemented OpenMP and parallelized our code across 1 to 32 threads on [type 
 Problem size for our serial shared-memory parallel code is limited to 10<sup>10</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GiB RAM per core. For `limit` = 10<sup>10</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB in memory, saturating an individual node. Ad
 
 ## 5. MPI
-<img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
+We explored two MPI implementations of our code. 
 
+In the first, the master process constructs the Eratosthenes sieve array before sharing it with worker processes via `MPI_Send()`. The verification loop work is distributed among workers from there. It is important to distribute the work equally, because otherwise execution time will be limited by the slowest process. Block partitioning of the input integer interval into sequential sub-intervals is not a viable way to distribute work, since large numbers (with more possible prime components) take longer to process than small numbers. Instead, we assign integers to the worker processes cyclically. For example, if there are 4 workers processing the integer interval {4 .. 20}, the distribution of work looks like:
+  * worker 0 processes [4, 12, 20] 
+  * worker 1 processes [6, 14]
+  * worker 2 processes [8, 16]
+  * worker 3 processes [10, 18]
+
+<img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
 
 ## 6. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
