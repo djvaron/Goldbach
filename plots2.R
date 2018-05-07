@@ -3,9 +3,9 @@ setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Gol
 #speedup plot
 rm(list=ls())
 png('serial_times_10.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime <- c(0.001,0.01,0.23,3.31,41.01,612.71)
+executionTime <- c(0.001,0.01,0.23,3.31,41.01,612.71,7264.9)
 executionTimeNoFlag <- c(0.004,0.04,0.98,12.56,148.42)
-problemSize <- c(5,6,7,8,9,10)
+problemSize <- c(5,6,7,8,9,10,11)
 problemSize <- 10^problemSize
 problemSizeNoFlag <- c(10^5, 10^6, 10^7, 10^8, 10^9)
 plot(problemSize,executionTime,type = "p",
@@ -13,7 +13,7 @@ plot(problemSize,executionTime,type = "p",
      pch = 17, log='xy', axes=F, col = "blue")
 points(problemSizeNoFlag, executionTimeNoFlag, type = 'p', col = "black", pch =15)
 axis(1, at = problemSize, labels = NULL)
-ey <- -3:3 ; aty <- 10^ey
+ey <- -3:4 ; aty <- 10^ey
 axis(2, at = aty, labels = NULL)
 legend("topleft", legend = c("-O3 flag","No flag"), pch = c(17,15), bty = "n", col = c('blue' ,'black'))
 dev.off()
