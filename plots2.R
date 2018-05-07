@@ -139,8 +139,10 @@ dev.off()
 #speedup plot
 rm(list=ls())
 png('mpi_v1v2.png',width = 6, height = 6, units = 'in', res = 300)
-executionTimeV1 <- c(38.930, 32.608, 36.284, 43.521, 65.745, 158.846)
-executionTimeV2 <- c()
+executionTimeV1 <- c(57.823,45.552,56.347,65.677,99.515,169.731)
+executionTimeV2 <- c(49.627,40.191,31.114,30.882,31.508,29.534)
+#executionTimeV1 <- c(38.930, 32.608, 36.284, 43.521, 65.745, 158.846)
+#executionTimeV2 <- c(30.803, 27.540, 20.933, 20.340, 44.562, 54.105)
 numCores <- c(1,2,4,8,16,32)
 plot(numCores,executionTimeV1,type = "p",
      xlab = "Number of cores", ylab = "Execution time [s]", main = "MPI execution time versus number of cores: 1.4e+9",
@@ -148,5 +150,5 @@ plot(numCores,executionTimeV1,type = "p",
 points(numCores, executionTimeV2, type = 'p', col = "blue", pch =17)
 axis(1, at = numCores, labels = NULL)
 axis(2, at = seq(0,200,by=20), labels = NULL)
-legend("topleft", legend = c("Version 1: sieve shared via MPI_Send","Version 2: independent sieve construction"), pch = c(15,17), bty = "n", col = c('black' ,'blue'))
+legend("topleft", legend = c("Version 1: sieve shared via MPI_Send()","Version 2: independent sieve construction"), pch = c(15,17), bty = "n", col = c('black' ,'blue'))
 dev.off()
