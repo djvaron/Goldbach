@@ -18,7 +18,6 @@ We tested the following forms of parallelism:
   * MPI distributed memory parallelism
   * OpenACC GPU accelerated computing
   * Hybrid MPI-OpenMP parallelism
-  * Hybrid ???-OpenACC parallelism
 
 ## 2. System specifications
 Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a g3.4xlarge instance with 16 GiB of GPU memory.  
@@ -110,9 +109,7 @@ int main(int argc, char** argv) {
 
 We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `-O3` optimization flag speeds up our code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher.
 
-
-
-<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="serial times 10"/>
+Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GiB RAM per core, for a total of 128 GiB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB in memory, saturating an individual node.
 
 To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler:
 
@@ -143,9 +140,7 @@ Problem size for our serial shared-memory parallel code is limited to 10<sup>10<
 ## 7. Hybrid MPI-OpenMP
 <img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="OPENACC">
 
-## 8. Hybrid ???-OpenACC
-
-## 9. Conclusions
+## 8. Conclusions
 Future steps:
   * store sieve array in long memory to increase problem size limit
   * construct and store sieve array across several nodes to scale parallelism to increased problem sizes
