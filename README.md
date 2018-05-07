@@ -22,6 +22,11 @@ We tested the following forms of parallelism:
 ## 2. System specifications
 Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a g3.4xlarge instance with 16 GiB of GPU memory.  
 
+Odyssey software:
+  * GCC version: `4.4.7`
+  * mpich version: `3.2`
+  * intel version: `17.0.2`
+
 ## 3. Serial code
 The serial code `goldbach.c` consists of:
   1. an Eratosthenes sieve subroutine for finding all the prime numbers in an input integer interval, and 
@@ -117,7 +122,7 @@ There are at least two possible approaches to overcoming this memory limitation:
   1. Store the sieve array across multiple nodes and communicate the different parts via MPI.
   2. Store the sieve in disk space.
 
-Neither of these approaches seems very promising, however, because passing large arrays between nodes is costly (see Sect. 5), as is loading them from disk space. We leave direct testing of these two options to future work, limiting our analysis here to the interval {1 .. 10<sup>11</sup>}.
+Neither of these approaches seems very promising, however, because passing large arrays between nodes is costly (see Sect. 5), as is loading them from disk space. We leave direct testing of these two options to a future work, limiting our analysis here to the interval {1 .. 10<sup>11</sup>}.
 
 To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler, and plotted the fractions of execution time spent on the Eratosthenes sieve and verification loop versus problem size:
 
