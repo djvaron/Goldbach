@@ -10,12 +10,12 @@ problemSize <- 10^problemSize
 problemSizeNoFlag <- c(10^5, 10^6, 10^7, 10^8, 10^9)
 plot(problemSize,executionTime,type = "p",
      xlab = "Problem size", ylab = "Execution time [s]", main = "Serial execution time versus problem size",
-     pch = 15, log='xy', axes=F)
-points(problemSizeNoFlag, executionTimeNoFlag, type = 'p', col = "blue", pch =17)
+     pch = 17, log='xy', axes=F, col = "blue")
+points(problemSizeNoFlag, executionTimeNoFlag, type = 'p', col = "black", pch =15)
 axis(1, at = problemSize, labels = NULL)
 ey <- -3:3 ; aty <- 10^ey
 axis(2, at = aty, labels = NULL)
-legend("topleft", legend = c("No flag","-O3 flag"), pch = c(15,17), bty = "n", col = c('black' ,'blue'))
+legend("topleft", legend = c("-O3 flag","No flag"), pch = c(17,15), bty = "n", col = c('blue' ,'black'))
 dev.off()
 ###################################OMP:10^10####################################################
 #speedup plot
@@ -143,7 +143,7 @@ executionTimeV1 <- c(38.930, 32.608, 36.284, 43.521, 65.745, 158.846)
 executionTimeV2 <- c()
 numCores <- c(1,2,4,8,16,32)
 plot(numCores,executionTimeV1,type = "p",
-     xlab = "Number of cores", ylab = "Execution time [s]", main = "MPI execution time versus number of cores: 1e+10",
+     xlab = "Number of cores", ylab = "Execution time [s]", main = "MPI execution time versus number of cores: 1.4e+9",
      pch = 15, ylim = c(0,200), axes = F)
 points(numCores, executionTimeV2, type = 'p', col = "blue", pch =17)
 axis(1, at = numCores, labels = NULL)
