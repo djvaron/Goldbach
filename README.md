@@ -151,7 +151,7 @@ This approach has two major weaknesses:
   2. Second, it requires that large arrays (up to 10-100 GiB) be passed via `MPI_Send()`, which is costly.
 
 #### Approach 2
-In the second MPI approach, each process constructs its own sieve array before work is distributed as in approach 1. This MPI implementation also fails to parallelize construction of the sieve array, but it boosts performance by distributing the verification loop work across numerous processes.
+In the second MPI approach, each process constructs its own sieve array before work is distributed as in approach 1. This MPI implementation also fails to parallelize the Eratosthenes sieve, but it boosts performance by distributing the verification loop work across numerous processes without incurring MPI_Send() overhead costs.
 
 #### Comparison
 
