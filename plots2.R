@@ -131,10 +131,10 @@ executionTime_1e10 <- c(419.131, 218.333, 165.608, 137.703)
 executionTime_1e11 <- c(1301.429)
 numCores <- c(32, 64, 96, 128)
 numCores_1e11 <- c(128)
-plot(numCores,executionTime_1e10,type = "p",
+plot(numCores,executionTime_1e9,type = "p",
      xlab = "Number of cores", ylab = "Execution time [s]", main = "Hybrid MPI-OpenMP execution time vs. number of cores",
      pch = 15, col="black", axes=F, ylim = c(10, 10000), log='y')
-points(numCores, executionTime_1e9, type = 'p', col = "blue", pch =16)
+points(numCores, executionTime_1e10, type = 'p', col = "blue", pch =16)
 points(numCores_1e11, executionTime_1e11, type = 'p', col = "red", pch =17)
 axis(1, at = numCores, labels = NULL)
 ey <- 1:4 ; aty <- 10^ey
