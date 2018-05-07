@@ -62,43 +62,43 @@ plot(numThreads,speedup,type = "p",
 dev.off()
 #################################ACC:PROBLEM SIZE VARIABLE########################################
 png('acc_speedup.png', width = 6, height = 6, units = "in", res = 300)
-ompTime <- c(0.00525689,0.00236297,0.00329614,0.00849891,0.0652399,0.683365,7.18525,76.5511,NA)
-parallelTime <- c(1.74985,
-                  2.02367,
-                  2.02737,
-                  2.00916,
-                  2.02869,
-                  2.09398,
-                  2.57734,
-                  8.01155,
-                  10.4567)
-serialTime <- c(4.20E-05,
-                4.40E-05,
-                0.000152,
-                0.001917,
-                0.023018,
-                0.256998,
-                3.79028,
-                42.7085,
-                61.3641)
-unoptimizedParallel <- c(2.03827,
-                         1.95644,
-                         1.88567,
-                         2.05259,
-                         2.04441,
-                         2.33071,
-                         4.79394,
-                         33.8034,
-                         53.9939)
+ompTime <- c(0.0182789,0.0159928,0.0195439,0.0176216,0.0668218,0.514013,6.25127,75.1181,NA)
+parallelTime <- c(2.288,
+                  2.271,
+                  2.280,
+                  2.251,
+                  2.277,
+                  2.318,
+                  2.893,
+                  8.328,
+                  10.885)
+serialTime <- c(.001,
+                .001,
+                .001,
+                .001,
+                .007,
+                .049,
+                1.151,
+                13.465,
+                19.367)
+unoptimizedParallel <- c(2.273,
+                         2.039,
+                         2.275,
+                         2.279,
+                         2.306,
+                         2.569,
+                         4.799,
+                         31.697,
+                         50.653)
 A <- c(2, 3, 4, 5, 6, 7, 8, 9, 10)
 problemSize <- c(10^A)
 plot(problemSize,serialTime,type = 'p', log ='x', col = "black", pch = 16, 
-     ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times versus Problem Size",axes = F, ylim = c(0,100))
+     ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times versus Problem Size for g3.4xlarge",axes = F, ylim = c(0,80))
 points(problemSize, parallelTime,type = 'p', col = "blue", pch =17)
 points(problemSize, unoptimizedParallel, type = "p", col ="red", pch =15)
 points(problemSize, ompTime, type = "p", col = "green", pch=18)
 axis(1, at = problemSize, labels = NULL)
-axis(2, at = seq(0,100,by= 10),labels = NULL)
+axis(2, at = seq(0,80,by= 10),labels = NULL)
 legend("topleft", legend = c("serial","optimized parallel", "parallel","omp"), pch = c(16,17,15,18), bty = "n", col = c('black' ,'blue','red','green'))
 dev.off()
 ##########################################profiling#################################################
