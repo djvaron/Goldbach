@@ -5,7 +5,7 @@
 #include "math.h"
 #include "time.h"
 
-bool * sieve(int limit) {
+/*bool * sieve(int limit) {
     
     unsigned int i,j;
     bool *primes;
@@ -28,6 +28,37 @@ bool * sieve(int limit) {
                 primes[j] = 0;
         }
     
+     printf("\nPrime numbers in range 1 to %d are: \n", limit);
+    for (i = 2; i < limit; i++){
+        if (primes[i])
+            printf("%d\n", i);
+        }
+    
+
+    return primes;
+}*/
+
+bool * sieve(long long int limit){
+
+    unsigned int i,j;
+    bool *primes;
+    
+    primes = calloc(limit, sizeof(bool));
+    #pragma omp parallel for schedule(static)
+    for (i = 2; i < limit; i++)
+        primes[i] = 1;
+
+    int val = floor(pow(limit,0.5));     
+    #pragma omp parallel for schedule(dynamic)
+    for (i = 2; i < val; i++)
+        // If prime[i] is not changed, then it is a prime
+        if (primes[i]) {
+            // Update all multiples of i
+            #pragma omp parallel for
+            for ( j = 2*i; j < limit; j += i)
+                primes[j] = 0;
+        }
+
     /* printf("\nPrime numbers in range 1 to %d are: \n", limit);
     for (i = 2; i < limit; i++){
         if (primes[i])
@@ -35,7 +66,7 @@ bool * sieve(int limit) {
         }
     */
 
-    return primes;
+return primes;
 }
 
 int main(int argc, char** argv) {

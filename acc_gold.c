@@ -2,30 +2,32 @@
 #include <stdlib.h>
 #include "time.h"
 #include <math.h>
-#include "omp.h"
 #include "openacc.h"
+#include "stdbool.h"
 
-int * sieve(int limit){
+int * sieve(long long int limit){
     
     unsigned int i,j;
     int *primes;
 
-    primes = malloc(sizeof(int) * limit);
- #pragma acc parallel loop copy(primes[0:limit])
+    primes = calloc(limit, sizeof(int));
+
+#pragma acc parallel loop copy(primes[0:limit])
  for (i = 2; i < limit; i++)
         primes[i] = 1;
 
  int n = floor(pow(limit,0.5));
+
 #pragma acc data copyin(primes[0:limit])
 {
 #pragma acc region
 {
-#pragma acc loop independent gang(8), vector(4) 
+#pragma acc loop independent //gang(8), vector(4) 
 for (i = 2; i < n; i++)
      // If prime[i] is not changed, then it is a prime
      if (primes[i]) {
          // Update all multiples of i
-	  #pragma acc loop independent gang(4), vector(16)
+	  #pragma acc loop independent// gang(4), vector(16)
          for ( j = 2*i; j < limit; j += i)
              primes[j] = 0;
      }
