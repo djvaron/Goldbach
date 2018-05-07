@@ -140,7 +140,7 @@ Problem size for our serial shared-memory parallel code is limited to 10<sup>10<
 We explored two MPI implementations of our code. 
 
 #### Approach 1
-In the first approach, the master process constructs the Eratosthenes sieve array before sharing it with worker processes via `MPI_Send()`. The verification loop iterations are distributed among workers from there. It is important to distribute the work equally, because otherwise execution time will be limited by the slowest process. Block partitioning of the input integer interval into sequential sub-intervals is not a viable way to distribute labor, since large numbers (with more possible prime components) take longer to process than small numbers. Instead, we assign integers to each worker process cyclically. For example, if there are 4 workers processing the integer interval {4 .. 20}, work is assigned as follows:
+In the first approach, the master process constructs the Eratosthenes sieve array before sharing it with worker processes via `MPI_Send()`. The verification loop iterations are then distributed among workers. It is important to distribute the work equally, because otherwise execution time will be limited by the slowest process. Block partitioning of the input integer interval into sequential sub-intervals is not a viable way to distribute labor, since large numbers (with more possible prime components) take longer to process than small numbers. Instead, we assign integers to each worker process cyclically. For example, if there are 4 workers processing the integer interval {4 .. 20}, work is assigned as follows:
   * worker 0 processes [4, 12, 20]. 
   * worker 1 processes [6, 14].
   * worker 2 processes [8, 16].
