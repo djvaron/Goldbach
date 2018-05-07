@@ -160,7 +160,7 @@ We compare execution times of the two MPI approaches for a problem size of 1.4&t
 
 Performance in approach 1 diminishes as the number of cores increases. This is because the sieve array, which occupies 1.4 GiB, must be passed from the master process to an increasing number of worker processes. By contrast, performance in approach 2 improves with increasing core count up to `numCores = 4`, but then remains nearly constant. This is because the cost of initializing and maintaining the MPI environment offsets performance gains from increased parallelism of the verification loop. Adding more cores will only increase performance if the problem size is increased as well and/or the sieve array is assembled in distributed memory.
 
-We see that the decision to forego multi-node assembly and storage of the Eratosthenes sieve array in this work (see Sect. 3.3) imposes a key limitation on the performance gains that distributed memory parallelism can provide. We know that parallelizing the sieve subroutine is desirable because, as shown in Sect. 3.3, it accounts for most of the execution time for large problem sizes. However, at this stage in our project, the best we can do is to apply shared memory parallelism to the Eratosthenes sieve, and distributed memory parallelism to the verification loop. We explore this hybrid parallel approach in Sect. 7.
+We see that the decision to forego multi-node assembly and storage of the Eratosthenes sieve array in this work (see Sect. 3.3) imposes a key limitation on the performance gains that distributed memory parallelism can provide. We know that parallelizing the sieve subroutine is desirable because, as shown in Sect. 3.3, it accounts for most of the execution time for large problem sizes. However, at this stage in our project, the best we can do is to apply shared memory parallelism to the Eratosthenes sieve, and distributed memory parallelism to the verification loop. We describe such a hybrid parallel approach in Sect. 7.
 
 ## 6. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
@@ -174,7 +174,13 @@ We see that the decision to forego multi-node assembly and storage of the Eratos
   At 10^11, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 100 GiB and the maximum storage for the g3.4xlarge array I requested was 8GiB which I modified to 16GiB by requesting more memory. To test a number larger than 10^11, a multi-node code with MPI-ACC across more than one GPU could be developed.
 
 ## 7. Hybrid MPI-OpenMP
+We designed a hybrid MPI-OpenMP version of our code that parallelizes the Eratosthenes sieve in shared memory and the verification loop in distributed memory. We request multiple `huce_intel` nodes and on each of them direct up to 32 processors to construct the prime number sieve array. The verification loop iterations are then distributed equally across all nodes, using the cyclical work assignment strategy described in Sect. 5. We test performance using up to 128 processors across 4 full compute nodes. 
+
+We compare execution times for different problem sizes and numbers of processors: 
+
 <img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="HYBRID">
+
+This approach scales better than the OpenMP and MPI approaches discussed in Sect. 4 and 5. With 128 processors across 4 compute nodes we are able to verify Goldbach's conjecture for even numbers up to 10<sup>11</sup>.
 
 ## 8. Conclusions
 Future steps:
