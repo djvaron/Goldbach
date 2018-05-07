@@ -154,7 +154,7 @@ In the second MPI approach, each process constructs its own sieve array before w
 
 Explain...
 
-Our decision to forego multi-node assembly and storage of the Eratosthenes sieve array in this work (see Sect. 3.3) imposes a key limitation on the performance boosts distributed memory parallelism can provide. Parallelizing the sieve subroutine is desirable because for large problem sizes it accounts for most of the execution time. The best we can do at this point is to apply shared memory parallelism to assembly of the sieve array, and distributed memory parallelism to the verification loop.
+Our decision to forego multi-node assembly and storage of the Eratosthenes sieve array in this work (see Sect. 3.3) imposes a key limitation on the performance boosts distributed memory parallelism can provide. Parallelizing the sieve subroutine is desirable because, as shown in Sect. 3.3, it accounts for most of the execution time when the problem size is large. The best we can do at this point is to apply shared memory parallelism to assembly of the sieve array, and distributed memory parallelism to the verification loop.
 
 ## 6. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
