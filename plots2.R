@@ -122,18 +122,24 @@ ggplot(DF1, aes(x = problemSize, y = value,fill=variable)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   ylab("%")+xlab("n")+ theme_classic()+theme(legend.title=element_blank())
 dev.off()
-###################################HYBRID_10####################################################
+###################################HYBRID####################################################
 #speedup plot
 rm(list=ls())
 png('hybrid_times_10.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime <- c(57.209, 32.274, 22.692, 19.632)
+executionTime_1e9 <- c(45.401, 28.620, 20.870, 16.623)
+executionTime_1e10 <- c(419.131, 218.333, 165.608, 137.703)
+executionTime_1e11 <- c(1301.429)
 numCores <- c(32, 64, 96, 128)
-plot(numCores,executionTime,type = "p",
+numCores_1e11 <- c(128)
+plot(numCores,executionTime_1e10,type = "p",
      xlab = "Number of cores", ylab = "Execution time [s]", main = "Hybrid MPI-OpenMP execution time vs. number of cores",
-     pch = 15, ylim = c(0,60), axes = F)
+     pch = 15, col="black", axes=F, ylim = c(10, 10000), log='y')
+points(numCores, executionTime_1e9, type = 'p', col = "blue", pch =16)
+points(numCores_1e11, executionTime_1e11, type = 'p', col = "red", pch =17)
 axis(1, at = numCores, labels = NULL)
-axis(2, at = seq(0,60,by=10), labels = NULL)
-legend("topright", legend=c("Problem size 1e+10"), pch = c(15), bty = "n", col = c('black'))
+ey <- 1:4 ; aty <- 10^ey
+axis(2, at = aty, labels = NULL)
+legend("topright", legend=c("Problem size 1e+9","Problem size 1e+10","Problem size 1e+11"), pch = c(15,16,17), bty = "n", col = c('black','blue','red'))
 dev.off()
 ###################################MPI:v1v2####################################################
 #speedup plot
