@@ -27,6 +27,8 @@ Odyssey software:
   * mpich version: `3.2`
   * intel version: `17.0.2`
   * Linux version: `2.6.32-642.6.2.el6.centos.plus.x86_64`
+  * CUDA driver version: `9010`
+  * pgcc version: `17.10-0 64-bit`
 
 ## 3. Serial code
 The serial code `goldbach.c` consists of:
@@ -188,13 +190,13 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
 ## 7. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
 
-  The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10^8. We think that [insert reasoning why]. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10^8 problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
+  The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10^8. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10^8 problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
 
   The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The unoptimized parallel code uses the default 128 thread count which access the same shared memory of the primes array. We desire more threads due to the embarrasingly parallel nature of our code, however without blocking, the memory access to the primes array is hindered by communications overhead. Specifying number of gangs distributes the primes array into a number of blocks to be shared by a smaller number of threads, decreasing the communications overhead when editing the primes array. The maximum number of threads in the system is 2048 (pgaccelinfo), so the total number of threads executing per block must multiply to 2048. We optimize the distribution of work into the blocks and threads and see a substantial increase in performance as seen by the blue triangles (gang/vector distributed work) versus red squares (unoptimized). 
   
   We are unsure why the OpenACC acceleration is better than the OpenMP. We postulate that OpenACC is more optimized than OpenACC with GPU architecture. Additionally, the blocking as seen by the unoptimized versus optimized OpenACC improves the OpenACC performance by reducing the communications overheads to the primes array.
   
-  At 10^11, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 100 GB and the maximum storage for the g3.4xlarge array I requested was 8 GB which I modified to 16 GB by requesting more memory. To test a number larger than 10^11, a multi-node code with MPI-ACC across more than one GPU could be developed.
+  At 10^11, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 100 GB and the maximum storage for the g3.4xlarge array I requested was 8 GB which I modified to 16 GB by requesting more memory. To test a number larger than 10^11, a multi-node code with MPI-OpenACC across more than one GPU could be developed.
 
 ## 8. Conclusions
 
