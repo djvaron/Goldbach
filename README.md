@@ -26,6 +26,7 @@ Odyssey software:
   * GCC version: `4.4.7`
   * mpich version: `3.2`
   * intel version: `17.0.2`
+  * Linux version: `2.6.32-642.6.2.el6.centos.plus.x86_64`
 
 ## 3. Serial code
 The serial code `goldbach.c` consists of:
