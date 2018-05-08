@@ -5,9 +5,9 @@
 #include "openacc.h"
 #include "stdbool.h"
 
-int * sieve(long long int limit){
+int * sieve(unsigned long long int limit){
     
-    unsigned int i,j;
+    unsigned long long int i, j;
     int *primes;
 
     primes = calloc(limit, sizeof(int));
@@ -22,12 +22,12 @@ int * sieve(long long int limit){
 {
 #pragma acc region
 {
-#pragma acc loop independent //gang(8), vector(4) 
+#pragma acc loop independent gang(16), vector(2) 
 for (i = 2; i < n; i++)
      // If prime[i] is not changed, then it is a prime
      if (primes[i]) {
          // Update all multiples of i
-	  #pragma acc loop independent// gang(4), vector(16)
+	  #pragma acc loop independent gang(16), vector(4)
          for ( j = 2*i; j < limit; j += i)
              primes[j] = 0;
      }
@@ -45,9 +45,14 @@ return primes;
 
 int main(int argc, char** argv) {
     
-    int lower, upper, count, i, n;    
-    lower = atoi(argv[1]);
-    upper = atoi(argv[2]);
+//    int lower, upper, count, i, n;    
+//    lower = atoi(argv[1]);
+//    upper = atoi(argv[2]);
+    int count;
+    unsigned long long int lower, upper, i, n;
+    lower = strtoull(argv[1], (char **)NULL, 10);
+    upper = strtoull(argv[2], (char **)NULL, 10);
+    printf("lower = %d, upper = %lli \n",lower,upper);
 
   //  clock_t begin = clock();
     double begin = omp_get_wtime();
