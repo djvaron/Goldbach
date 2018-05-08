@@ -123,7 +123,7 @@ There are at least two possible approaches to overcoming this memory limitation:
   1. Store the sieve array across multiple nodes and communicate the different parts via MPI.
   2. Store the sieve in disk space.
 
-Neither of these approaches seems very promising, however, because passing large arrays between nodes is costly (see Sect. 5), as is loading them from disk space. We leave direct testing of these two options to a future work, limiting our analysis here to the interval {1 .. 10<sup>11</sup>}.
+Neither of these approaches is ideal, however, because passing large arrays between nodes is costly (see Sect. 5), as is loading them from disk space. We leave direct testing of these two options to a future work, limiting our analysis here to the interval {1 .. 10<sup>11</sup>}.
 
 To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler and plotted the fractions of execution time spent on the Eratosthenes sieve and verification loop versus problem size:
 
