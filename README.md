@@ -164,8 +164,8 @@ We see that our decision to forego multi-node assembly and storage of the Eratos
 Example compile &amp; run commands:
 ```C
 $ module load intel/17.0.2-fasrc01 mpich/3.2-fasrc03
-$ mpicc -O3 mpi_goldbach.c -o mpi_O3
-$ time mpirun -np 1 ./mpi_O3 4 1000000000
+$ mpicc -O3 v1_mpi_goldbach.c -o v1_mpi_O3
+$ time mpirun -np 8 ./v1_mpi_O3 4 1000000000
 ```
 
 ## 6. Hybrid MPI-OpenMP
@@ -176,6 +176,14 @@ We compare execution times for different problem sizes and numbers of processors
 <img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="HYBRID">
 
 This approach scales better than the OpenMP and MPI approaches discussed in Sect. 4 and 5. With 128 processors across 4 compute nodes we are able to verify Goldbach's conjecture for even numbers up to 10<sup>11</sup> in a reasonable amount of time (approximately 20 minutes).
+
+Example compile &amp; run commands:
+```C
+module load intel/17.0.2-fasrc01 mpich/3.2-fasrc03
+mpicc -O3 -fopenmp hybrid_goldbach.c -o hybrid_O3 -lm
+export OMP_NUM_THREADS=32
+time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
+```
 
 ## 7. OpenACC
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
