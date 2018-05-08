@@ -189,7 +189,7 @@ To better understand how cost scales with problem size, we profiled our code usi
 For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
 
 ## 4. OpenMP
-We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
+We implemented OpenMP and parallelized our code across 1 to 32 threads on the `huce_intel` partition and generated the figure below.  
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
 
 ## 5. MPI
