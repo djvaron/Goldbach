@@ -22,6 +22,61 @@ We tested the following forms of parallelism:
 ## 2. System specifications
 Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a `g3.4xlarge` instance with 16 GB of GPU memory.  
 
+`huce_intel` specs:
+```Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                32
+On-line CPU(s) list:   0-31
+Thread(s) per core:    1
+Core(s) per socket:    16
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 79
+Stepping:              1
+CPU MHz:               2095.331
+BogoMIPS:              4189.99
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              40960K
+NUMA node0 CPU(s):     0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
+NUMA node1 CPU(s):     1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31
+```
+
+`g3.4xlarge` specs:
+```
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                16
+On-line CPU(s) list:   0-15
+Thread(s) per core:    2
+Core(s) per socket:    8
+Socket(s):             1
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 79
+Model name:            Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
+Stepping:              1
+CPU MHz:               2698.906
+CPU max MHz:           3000.0000
+CPU min MHz:           1200.0000
+BogoMIPS:              4600.13
+Hypervisor vendor:     Xen
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              46080K
+NUMA node0 CPU(s):     0-15
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single retpoline kaiser fsgsbase bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx xsaveopt
+```
+
 Odyssey software:
   * GCC version: `4.4.7`
   * mpich version: `3.2`
@@ -134,7 +189,7 @@ To better understand how cost scales with problem size, we profiled our code usi
 For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
 
 ## 4. OpenMP
-We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
+We implemented OpenMP and parallelized our code across 1 to 32 threads on the `huce_intel` partition and generated the figure below.  
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
 
 ## 5. MPI
@@ -192,11 +247,11 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
 
   The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10<sup>8</sup>. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10<sup>8</sup> problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
 
-  The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The unoptimized parallel code uses the default 128 thread count which access the same shared memory of the primes array. We desire more threads due to the embarrasingly parallel nature of our code, however without blocking, the memory access to the primes array is hindered by communications overhead. Specifying number of gangs distributes the primes array into a number of blocks to be shared by a smaller number of threads, decreasing the communications overhead when editing the primes array. The maximum number of threads in the system is 2048 (pgaccelinfo), so the total number of threads executing per block must multiply to 2048. We optimize the distribution of work into the blocks and threads and see a substantial increase in performance as seen by the blue triangles (gang/vector distributed work) versus red squares (unoptimized). 
+  The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The unoptimized parallel code uses the default 128 thread count which access the same global memory of the primes array. We desire more threads due to the embarrasingly parallel nature of our code, however without blocking, the memory access to the primes array is hindered by communications overhead. So instead of pulling from global memory again, blocking the primes array into the shared memory allows other threads within the same block to access and edit it. Specifying number of gangs distributes the primes array into a number of blocks to be shared by a smaller number of threads, decreasing the communications overhead when editing the primes array. The maximum number of threads in the system is 2048 (pgaccelinfo), so the total number of threads executing per block must multiply to 2048. We optimize the distribution of work into the blocks and threads and see a substantial increase in performance as seen by the blue triangles (gang/vector distributed work) versus red squares (unoptimized). 
   
   We are unsure why the OpenACC acceleration is better than the OpenMP. We postulate that OpenACC is more optimized than OpenACC with GPU architecture. Additionally, the blocking as seen by the unoptimized versus optimized OpenACC improves the OpenACC performance by reducing the communications overheads to the primes array.
   
-  At 10<sup>11</sup>, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 100 GB and the maximum storage for the g3.4xlarge array I requested was 8 GB which I modified to 16 GB by requesting more memory. To test a number larger than 10<sup>11</sup>, a multi-node code with MPI-OpenACC across more than one GPU could be developed.
+  At 10<sup>10</sup>, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 10 GB and the CUDA global memory size for the g3.4xlarge was 8 GB. To test a number larger than 10<sup>10</sup>, a multi-node code with MPI-OpenACC across more than one GPU could be developed.
 
 ## 8. Conclusions
 
