@@ -255,7 +255,7 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
 
 ## 8. Conclusions
 
-  * OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).
+  [comment]: <> * OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).
   * Problem size is limited by the size of the Eratosthenes sieve array.
   * If we want to solve larger problems, we need to find a new way to store the sieve array, because it quickly grows too large to be stored in RAM on a single `huce_intel` compute node. We have at least two options, neither of which is ideal:
     1. store sieve array in disk space (I/O bottleneck).
