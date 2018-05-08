@@ -179,10 +179,10 @@ This approach scales better than the OpenMP and MPI approaches discussed in Sect
 
 Example compile &amp; run commands:
 ```C
-module load intel/17.0.2-fasrc01 mpich/3.2-fasrc03
-mpicc -O3 -fopenmp hybrid_goldbach.c -o hybrid_O3 -lm
-export OMP_NUM_THREADS=32
-time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
+$ module load intel/17.0.2-fasrc01 mpich/3.2-fasrc03
+$ mpicc -O3 -fopenmp hybrid_goldbach.c -o hybrid_O3 -lm
+$ export OMP_NUM_THREADS=32
+$ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
 ```
 
 ## 7. OpenACC
