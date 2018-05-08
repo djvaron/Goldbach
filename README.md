@@ -20,7 +20,7 @@ We tested the following forms of parallelism:
   * Hybrid MPI-OpenMP parallelism
 
 ## 2. System specifications
-Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a g3.4xlarge instance with 16 GiB of GPU memory.  
+Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a g3.4xlarge instance with 16 GB of GPU memory.  
 
 Odyssey software:
   * GCC version: `4.4.7`
@@ -117,7 +117,7 @@ We find that the computational cost of verifying Goldbach's conjecture using our
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="SERIAL"/>
 
-Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GiB RAM per core, for a total of 128 GiB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB, saturating random access memory on an individual node.
+Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GB RAM per core, for a total of 128 GB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB, saturating random access memory on an individual node.
 
 There are at least two possible approaches to overcoming this memory limitation:
   1. Store the sieve array across multiple nodes and communicate the different parts via MPI.
@@ -170,7 +170,7 @@ We see that the decision to forego multi-node assembly and storage of the Eratos
   
   We are unsure why the OpenACC acceleration is better than the OpenMP. We postulate that OpenACC is more optimized than OpenACC with GPU architecture. Additionally, the blocking as seen by the unoptimized versus optimized OpenACC improves the OpenACC performance by reducing the communications overheads to the primes array.
   
-  At 10^11, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 100 GiB and the maximum storage for the g3.4xlarge array I requested was 8GiB which I modified to 16GiB by requesting more memory. To test a number larger than 10^11, a multi-node code with MPI-ACC across more than one GPU could be developed.
+  At 10^11, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 100 GB and the maximum storage for the g3.4xlarge array I requested was 8 GB which I modified to 16 GB by requesting more memory. To test a number larger than 10^11, a multi-node code with MPI-ACC across more than one GPU could be developed.
 
 ## 7. Hybrid MPI-OpenMP
 We designed a hybrid MPI-OpenMP version of our code that parallelizes the Eratosthenes sieve in shared memory and the verification loop in distributed memory. We request multiple `huce_intel` nodes and on each of them direct up to 32 processors to construct the prime number sieve array. The verification loop iterations are then distributed equally across all nodes, using the cyclical work assignment strategy described in Sect. 5. We test performance using up to 128 processors across 4 full compute nodes. 
