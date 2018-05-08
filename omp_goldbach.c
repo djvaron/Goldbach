@@ -3,7 +3,7 @@
 #include "time.h"
 #include "stdbool.h"
 #include "omp.h"
-
+#include "math.h"
 bool * sieve(long long int limit){
     
     unsigned int i,j;
@@ -14,8 +14,9 @@ bool * sieve(long long int limit){
 #pragma omp parallel for 
     for (i = 2; i < limit; i++)
         primes[i] = 1;
+    int val = floor(pow(limit,0.5));
 #pragma omp parallel for schedule(dynamic)
-    for (i = 2; i*i < limit; i++)
+    for (i = 2; i < val; i++)
         // If prime[i] is not changed, then it is a prime
         if (primes[i]) {
             // Update all multiples of i
@@ -36,20 +37,23 @@ return primes;
 
 int main(int argc, char** argv) {
     
-    int lower, count;
-    long long int upper, i, n;     
-    lower = atoi(argv[1]);
-    upper = atoi(argv[2]);
-//    lower = 4; upper = 2500000000;  
+    //int lower, count;
+    //long long int upper, i, n;     
+    //lower = atoi(argv[1]);
+    //upper = atoi(argv[2]);
 
-//    printf("lower = %d, upper = %lli \n",lower,upper);
+    int count;
+    unsigned long long int lower, upper, i, n;
+    lower = strtoull(argv[1], (char **)NULL, 10);
+    upper = strtoull(argv[2], (char **)NULL, 10);
 
-    clock_t begin = clock();
-
+    printf("lower = %lli, upper = %lli \n",lower,upper);
+//    clock_t begin = clock();
+    double begin= omp_get_wtime();
     bool * primes = sieve(upper);    
 //    printf("size of B[0]: %d \n", sizeof(primes[0]));    
 //    printf("bits for long long integer: %d\n", 8*sizeof(long long int));
- #pragma omp parallel for schedul(dynamic)
+ #pragma omp parallel for schedule(dynamic)
     for (n = lower; n <= upper; n += 2) {
         count = 0;
 	for (i = 2; i <= n/2; i++) {
@@ -60,14 +64,14 @@ int main(int argc, char** argv) {
 	    }
         }
         if (count == 0) {
-//	    printf("FALSE %d", n);
+	    printf("FALSE %lli", n);
 	}
     }
   
-    clock_t end = clock();
-    
+   // clock_t end = clock();
+    double time_spent = omp_get_wtime() - begin;
 //    printf("checked: %lli \n", n);
-//    printf("time spent: %.5g seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
+    printf("time spent: %.5g seconds\n", time_spent);
 
     free(primes);
 
