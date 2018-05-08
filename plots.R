@@ -18,12 +18,12 @@ dev.off()
 library(latex2exp)
 rm(list=ls())
 png('omp_speedup_10.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime_v0 <- c(63.6211,
-                      46.5893,
-                      46.6875,
-                      43.0204,
-                      41.9105,
-                      35.9967)
+executionTime_v0 <- c(68.0098,
+                      53.3786,
+                      48.8148,
+                      43.6642,
+                      39.0758,
+                      36.2248)
 numThreads <- c(1,2,4,8,16,32)
 speedup <- executionTime_v0[1]/executionTime_v0
 plot(numThreads,speedup,type = "p",
