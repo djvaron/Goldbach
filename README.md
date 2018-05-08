@@ -117,7 +117,7 @@ We find that the computational cost of verifying Goldbach's conjecture using our
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="SERIAL"/>
 
-Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GB RAM per core, for a total of 128 GB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB, saturating random access memory on an individual node.
+Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GB RAM per core, for a total of 128 GB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GB, saturating random access memory on an individual node.
 
 There are at least two possible approaches to overcoming this memory limitation:
   1. Store the sieve array across multiple nodes and communicate the different parts via MPI.
@@ -147,7 +147,7 @@ In the first approach, the master process constructs the Eratosthenes sieve arra
 
 This approach has two major weaknesses: 
   1. First, it does not parallelize the Eratosthenes sieve, which accounts for most of the execution time for large problem sizes. 
-  2. Second, it requires that large arrays (up to 10-100 GiB) be passed via `MPI_Send()`, which is costly.
+  2. Second, it requires that large arrays (up to 10-100 GB) be passed via `MPI_Send()`, which is costly.
 
 #### Approach 2
 In the second MPI approach, each process constructs its own sieve array before work is distributed as in approach 1. This MPI implementation also fails to parallelize the Eratosthenes sieve, but it boosts performance by distributing the verification loop iterations to numerous workers without incurring `MPI_Send()` overhead costs.
@@ -157,7 +157,7 @@ We compare execution times of the two MPI approaches for a problem size of 1.4&t
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
 
-Performance in approach 1 diminishes as the number of cores increases. This is because the sieve array, which occupies 1.4 GiB, must be passed from the master process to an increasing number of worker processes. By contrast, performance in approach 2 improves with increasing core count up to `numCores = 4`, but then remains nearly constant. This is because the cost of initializing and maintaining the MPI environment offsets performance gains from increased parallelism of the verification loop. Adding more cores will only increase performance if the problem size is increased as well and/or the sieve array is assembled in distributed memory.
+Performance in approach 1 diminishes as the number of cores increases. This is because the sieve array, which occupies 1.4 GB, must be passed from the master process to an increasing number of worker processes. By contrast, performance in approach 2 improves with increasing core count up to `numCores = 4`, but then remains nearly constant. This is because the cost of initializing and maintaining the MPI environment offsets performance gains from increased parallelism of the verification loop. Adding more cores will only increase performance if the problem size is increased as well and/or the sieve array is assembled in distributed memory.
 
 We see that the decision to forego multi-node assembly and storage of the Eratosthenes sieve array in this work (see Sect. 3.3) imposes a key limitation on the performance gains that distributed memory parallelism can provide. We know that parallelizing the sieve subroutine is desirable because, as shown in Sect. 3.3, it accounts for most of the execution time for large problem sizes. However, at this stage in our project, the best we can do is to apply shared memory parallelism to the Eratosthenes sieve, and distributed memory parallelism to the verification loop. We describe such a hybrid parallel approach in Sect. 7.
 
