@@ -134,8 +134,6 @@ For problem sizes greater than 10<sup>7</sup>, our code spends more time in the 
 We implemented OpenMP and parallelized our code across 1 to 32 threads on [type of intel CPU] and generated the figure below.  
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
 
-Problem size for our serial shared-memory parallel code is limited to 10<sup>10</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GiB RAM per core. For `limit` = 10<sup>10</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GiB in memory, saturating an individual node. Ad
-
 ## 5. MPI
 We explored two MPI implementations of our code. 
 
