@@ -47,9 +47,9 @@ This subroutine initializes a Boolean array of size `limit` = <a href="https://w
 #include "time.h"
 #include "stdbool.h"
 
-bool * sieve(long long int limit){
+bool * sieve(unsigned long long int limit){
 
-    unsigned int i,j;
+    unsigned long long int i,j;
     bool *primes;
     
     /* initialize primes array of 1's */
@@ -75,9 +75,9 @@ This routine checks Goldbach's conjecture for all even numbers in an input integ
 int main(int argc, char** argv) {
 
     int count;
-    long long int lower, upper, i, n;
-    lower = atoi(argv[1]);
-    upper = atoi(argv[2]);
+    unsigned long long int lower, upper, i, n;
+    lower = strtoull(argv[1], (char **)NULL, 10);
+    upper = strtoull(argv[2], (char **)NULL, 10);
 
     clock_t begin = clock();
     
