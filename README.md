@@ -21,6 +21,7 @@ We tested the following forms of parallelism:
 
 ## 2. System specifications
 Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a `g3.4xlarge` instance with 16 GB of GPU memory.  
+
 `huce_intel` specs:
 ```Architecture:          x86_64
 CPU op-mode(s):        32-bit, 64-bit
@@ -45,6 +46,7 @@ L3 cache:              40960K
 NUMA node0 CPU(s):     0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
 NUMA node1 CPU(s):     1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31
 ```
+
 `g3.4xlarge` specs:
 ```
 Architecture:          x86_64
