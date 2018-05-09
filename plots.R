@@ -134,7 +134,7 @@ aws_serial <- c(.001,.001,.001,.001,.007,.049,1.151, 13.465,NA,NA)
 aws_acc <- c(2.288, 2.271,2.280,2.251, 2.277, 2.318, 2.893,8.328,NA,NA)
 acc_speedup = aws_serial/aws_acc
 ody_serial<- c(0.003,0.003,0.004,0.007,0.020,0.210,3.063,36.293,424.16,NA)
-ody_speedup <- ody_serial/c(NA,NA,NA, NA, NA, NA,2.29872,24.7641 ,36.2248,NA)
+ody_speedup <- ody_serial/c(NA,NA,0.0824091, 0.0812076,0.089224, 0.283266,2.29872,24.7641 ,36.2248,NA)
 hybrid_speedup = ody_serial/c(NA,NA,NA,NA,NA,NA,NA,16.623,137.703,1301.429)
 #MPI_speedup = c(NA,NA,NA,NA,NA,NA,NA,NA,)
 problemSize <- c(2, 3, 4, 5, 6, 7, 8, 9, 10,11)
