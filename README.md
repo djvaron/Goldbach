@@ -172,7 +172,7 @@ int main(int argc, char** argv) {
 
 We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `O3` optimization flag speeds up our code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher. We therefore use `O3` optimization for all of our parallel implementations.
 
-<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="SERIAL"/>
+<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_11.png" width="600" alt="SERIAL"/>
 
 Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GB RAM per core, for a total of 128 GB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GB, saturating random access memory on an individual node.
 
@@ -210,7 +210,7 @@ This approach has two major weaknesses:
 In the second MPI approach, each process constructs its own sieve array before work is distributed as in approach 1. This MPI implementation also fails to parallelize the Eratosthenes sieve, but it boosts performance by distributing the verification loop iterations to numerous workers without incurring `MPI_Send()` overhead costs.
 
 #### Comparison
-We compare execution times of the two MPI approaches for a problem size of 1.4&times;10<sup>10</sup>, using up to 32 cores on a single node:
+We compare execution times of the two MPI approaches for a problem size of 1.4&times;10<sup>9</sup>, using up to 32 cores on a single node:
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
 
@@ -255,7 +255,7 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
 
 ## 8. Conclusions
 
-  * OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).
+  [comment]: <> * OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).
   * Problem size is limited by the size of the Eratosthenes sieve array.
   * If we want to solve larger problems, we need to find a new way to store the sieve array, because it quickly grows too large to be stored in RAM on a single `huce_intel` compute node. We have at least two options, neither of which is ideal:
     1. store sieve array in disk space (I/O bottleneck).
