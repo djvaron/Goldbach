@@ -23,7 +23,8 @@ We tested the following forms of parallelism:
 Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a `g3.4xlarge` instance with 16 GB of GPU memory.  
 
 `huce_intel` specs:
-```Architecture:          x86_64
+```
+Architecture:          x86_64
 CPU op-mode(s):        32-bit, 64-bit
 Byte Order:            Little Endian
 CPU(s):                32
@@ -97,11 +98,6 @@ Example of vanilla compile &amp; run commands:
 ### 3.1. Eratosthenes sieve
 
 This subroutine initializes a Boolean array of size `limit` = <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;x_{\text{max}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;x_{\text{max}}" title="x_{\text{max}}" /></a> bytes in heap memory, with all elements set to 1. It then loops over integers <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;i" title="i" /></a> from 2 to `floor(sqrt(limit))`, setting the array value for all (non-unit) multiples of <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;i" title="i" /></a> to 0. The result is a Boolean array of size <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;x_{\text{max}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;x_{\text{max}}" title="x_{\text{max}}" /></a> with non-zero elements at the positions of prime numbers.
-```javascript {.line-numbers}
-function add(x, y) {
-  return x + y
-}
-```
 
 ```C
 #include <stdio.h>
@@ -194,9 +190,11 @@ To better understand how cost scales with problem size, we profiled our code usi
 For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
 
 ## 4. OpenMP
-We parallelize the two loops in the sieve and the main function verification's outer loop. 
-We implemented OpenMP and parallelized our code across 1 to 32 threads on the `huce_intel` partition and generated the figure below for a problem sizes of 10<sup>10</sup>,10<sup>9</sup> and 10<sup>8</sup>. We see the largest speedup for 10<sup>8</sup> versus larger problem sizes. As the primes array grows, the code spends a proportionally longer time creating the array versus checking through the array. This causes a disproportionate increase in the sieve with respect to the main function.
+We parallelize the all loops in the sieve. The if-statement break within the main function prevents us from parallelizing the inner loop. 
+We implemented OpenMP parallelization across 1 to 32 threads on the `huce_intel` partition and generated the figure below for a problem sizes of 10<sup>10</sup>,10<sup>9</sup> and 10<sup>8</sup>. We see the largest speedup for 10<sup>8</sup> versus larger problem sizes. As the primes array grows, the code spends a proportionally longer time creating the array versus checking through the array. This causes a disproportionate increase in the sieve with respect to the main function.
+The sudden increase in 0<sup>8</sup> at 32 threads that is not seen in 10<sup>9</sup> and 10<sup>10</sup> can be owed to the shift in sieve versus main function times at 10<sup>8</sup>. After 10<sup>8</sup> the parallelization in the sieve doesn't overcome the increasing time burden of creating the primes array.
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
+
 
 ## 5. MPI
 We explored two MPI implementations of our code. 
