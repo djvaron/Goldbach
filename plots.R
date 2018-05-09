@@ -18,20 +18,38 @@ setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Gol
 library(latex2exp)
 rm(list=ls())
 png('omp_speedup_10.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime_v0 <- c(68.0098,
+speedup_10 <- 69.0098/c(68.0098,
                       53.3786,
                       48.8148,
                       43.6642,
                       39.0758,
                       36.2248)
+speedup_9 <-43.8269/c(43.8269,
+                      36.3054,
+                      29.0519,
+                      29.9225,
+                      29.3303,
+                      24.7641)
+speedup_8 <- 13.1992/c(13.1992,
+                      11.7,
+                      8.03956,
+                      6.96384,
+                      6.55461,
+                      2.29872)
 numThreads <- c(1,2,4,8,16,32)
-speedup <- executionTime_v0[1]/executionTime_v0
-plot(numThreads,speedup,type = "p",
-     xlab = "Number of Threads", ylab = "Speedup",main = TeX("Problem Size $10^{10}$"),
-     pch = 15,axes = F, ylim = c(1,2))
+
+plot(numThreads,speedup_10,type = "p",
+     xlab = "Number of Threads", ylab = "Speedup",main = TeX("OpenMP Speedup"),
+     pch = 15,axes = F, ylim = c(1,7),col = 'blue')
+points(numThreads,speedup_9,pch = 16,col = 'black')
+points(numThreads,speedup_8,pch = 17,col='red')
+legend("topleft",legend = c(TeX('$10^{10}$'),TeX('$10^{9}$'),TeX('$10^{8}$')),
+       pch = c(15,16,17),bty='n',col = c('blue','black','red'))
 axis(1,at = numThreads, labels = NULL)
-axis(2,at = seq(1,2,by= .25),labels = NULL)
+axis(2,at = seq(1,7,by= 1),labels = NULL)
 dev.off()
+
+
 #####################################OMP:10^9####################################################
 png('omp_speedup_9.png',width = 6, height = 6, units = 'in', res = 300)
 executionTime_v0 <- c(43.8269,
@@ -105,8 +123,8 @@ dev.off()
 #################################blocking optimization############################################
 rm(list=ls())
 png("blocking_optimization_9.png", width = 6, height = 6, units = "in", res= 300)
-code <- c("default\nblocksize", "1 block", "block\noptimized",'serial')
-times<- c(31.697,12.92,8.328,13.465)
+code <- c("default\nblocksize", "block\noptimized",'serial')
+times<- c(31.697,8.328,13.465)
 barplot(times,main = "OpenACC Execution Time", xlab ="",names.arg = code,col = 'blue',ylim =c(0,35))
 dev.off()
 ################################overall speedup###################################################
