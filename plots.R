@@ -18,7 +18,7 @@ setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Gol
 library(latex2exp)
 rm(list=ls())
 png('omp_speedup_10.png',width = 6, height = 6, units = 'in', res = 300)
-speedup_10 <- 69.0098/c(497.25,
+speedup_10 <- 497.25/c(497.25,
                       408.993,
                       351.904,
                       358.511,
