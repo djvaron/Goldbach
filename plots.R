@@ -18,12 +18,12 @@ setwd('/Users/adashaw/Documents/2018spring/cs205_lec/project/Goldbach_Daniel/Gol
 library(latex2exp)
 rm(list=ls())
 png('omp_speedup_10.png',width = 6, height = 6, units = 'in', res = 300)
-speedup_10 <- 69.0098/c(68.0098,
-                      53.3786,
-                      48.8148,
-                      43.6642,
-                      39.0758,
-                      36.2248)
+speedup_10 <- 69.0098/c(497.25,
+                      408.993,
+                      351.904,
+                      358.511,
+                      344.347,
+                      296.157)
 speedup_9 <-43.8269/c(43.8269,
                       36.3054,
                       29.0519,
@@ -45,39 +45,40 @@ points(numThreads,speedup_9,pch = 16,col = 'black')
 points(numThreads,speedup_8,pch = 17,col='red')
 legend("topleft",legend = c(TeX('$10^{10}$'),TeX('$10^{9}$'),TeX('$10^{8}$')),
        pch = c(15,16,17),bty='n',col = c('blue','black','red'))
+
 axis(1,at = numThreads, labels = NULL)
 axis(2,at = seq(1,7,by= 1),labels = NULL)
 dev.off()
 
 
 #####################################OMP:10^9####################################################
-png('omp_speedup_9.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime_v0 <- c(43.8269,
-                      36.3054,
-                      29.0519,
-                      29.9225,
-                      29.3303,
-                      24.7641)
-numThreads <- c(1,2,4,8,16,32)
-speedup <- executionTime_v0[1]/executionTime_v0
-plot(numThreads,speedup,type = "p",
-     xlab = "Number of Threads", ylab = "Speedup", main = "Speedup with Increasing OpenMP Threads",
-     pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
-dev.off()
-#####################################OMP:10^8####################################################
-png('omp_speedup_8.png',width = 6, height = 6, units = 'in', res = 300)
-executionTime_v0 <- c(13.1992,
-                      11.7,
-                      8.03956,
-                      6.96384,
-                      6.55461,
-                      2.29872)
-numThreads <- c(1,2,4,8,16,32)
-speedup <- executionTime_v0[1]/executionTime_v0
-plot(numThreads,speedup,type = "p",
-     xlab = "Number of Threads", ylab = "Speedup", main = "Speedup with Increasing OpenMP Threads",
-     pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
-dev.off()
+# png('omp_speedup_9.png',width = 6, height = 6, units = 'in', res = 300)
+# executionTime_v0 <- c(43.8269,
+#                       36.3054,
+#                       29.0519,
+#                       29.9225,
+#                       29.3303,
+#                       24.7641)
+# numThreads <- c(1,2,4,8,16,32)
+# speedup <- executionTime_v0[1]/executionTime_v0
+# plot(numThreads,speedup,type = "p",
+#      xlab = "Number of Threads", ylab = "Speedup", main = "Speedup with Increasing OpenMP Threads",
+#      pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
+# dev.off()
+# #####################################OMP:10^8####################################################
+# png('omp_speedup_8.png',width = 6, height = 6, units = 'in', res = 300)
+# executionTime_v0 <- c(13.1992,
+#                       11.7,
+#                       8.03956,
+#                       6.96384,
+#                       6.55461,
+#                       2.29872)
+# numThreads <- c(1,2,4,8,16,32)
+# speedup <- executionTime_v0[1]/executionTime_v0
+# plot(numThreads,speedup,type = "p",
+#      xlab = "Number of Threads", ylab = "Speedup", main = "Speedup with Increasing OpenMP Threads",
+#      pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
+# dev.off()
 #################################ACC:PROBLEM SIZE VARIABLE########################################
 rm(list = ls())
 png('acc_speedup.png', width = 6, height = 6, units = "in", res = 300)
@@ -140,11 +141,11 @@ hybrid_speedup = ody_serial/c(NA,NA,NA,NA,NA,NA,NA,16.623,137.703,1301.429)
 #MPI_speedup = c(NA,NA,NA,NA,NA,NA,NA,NA,)
 problemSize <- c(2, 3, 4, 5, 6, 7, 8, 9, 10,11)
 plot(problemSize,acc_speedup,xlab='n',ylab="speedup",main=TeX("Parallel Speedup of Various Architectures at $10^n$")
-     , pch = 17,col='blue',ylim = c(0,15),axes = F)
+     , pch = 17,col='blue',ylim = c(0,5),axes = F)
 points(problemSize, ody_speedup,pch = 16, col = 'black')
 points(problemSize,hybrid_speedup,pch=18,col = 'green')
 axis(1, at = problemSize, labels = NULL)
-axis(2, at = seq(0,15,by= 1),labels = NULL)
+axis(2, at = seq(0,5,by= 1),labels = NULL)
 legend("topleft", legend = c('OpenACC', 'OpenMP','OpenMP-MPI'),col=c('blue', 'black','green'), 
        pch = c(17,16,18),bty='n')
 dev.off()
