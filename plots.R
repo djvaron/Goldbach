@@ -61,26 +61,11 @@ plot(numThreads,speedup,type = "p",
      pch = 15, ylim=c(1,executionTime_v0[1]/tail(executionTime_v0,n=1)))
 dev.off()
 #################################ACC:PROBLEM SIZE VARIABLE########################################
+rm(list = ls())
 png('acc_speedup.png', width = 6, height = 6, units = "in", res = 300)
-ompTime <- c(0.0182789,0.0159928,0.0195439,0.0176216,0.0668218,0.514013,6.25127,75.1181,NA)
-parallelTime <- c(2.288,
-                  2.271,
-                  2.280,
-                  2.251,
-                  2.277,
-                  2.318,
-                  2.893,
-                  8.328,
-                  10.885)
-serialTime <- c(.001,
-                .001,
-                .001,
-                .001,
-                .007,
-                .049,
-                1.151,
-                13.465,
-                19.367)
+#ompTime <- c(0.0182789,0.0159928,0.0195439,0.0176216,0.0668218,0.514013,6.25127,75.1181)
+parallelTime <- c(2.288, 2.271,2.280,2.251, 2.277, 2.318, 2.893,8.328)
+serialTime <- c(.001,.001,.001,.001,.007,.049,1.151, 13.465)
 unoptimizedParallel <- c(2.273,
                          2.039,
                          2.275,
@@ -88,15 +73,14 @@ unoptimizedParallel <- c(2.273,
                          2.306,
                          2.569,
                          4.799,
-                         31.697,
-                         50.653)
-A <- c(2, 3, 4, 5, 6, 7, 8, 9, 10)
+                         31.697)
+A <- c(2, 3, 4, 5, 6, 7, 8, 9)
 problemSize <- c(10^A)
 plot(problemSize,serialTime,type = 'p', log ='x', col = "black", pch = 16, 
      ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times versus Problem Size for g3.4xlarge",axes = F, ylim = c(0,80))
 points(problemSize, parallelTime,type = 'p', col = "blue", pch =17)
 points(problemSize, unoptimizedParallel, type = "p", col ="red", pch =15)
-points(problemSize, ompTime, type = "p", col = "green", pch=18)
+#points(problemSize, ompTime, type = "p", col = "green", pch=18)
 axis(1, at = problemSize, labels = NULL)
 axis(2, at = seq(0,80,by= 10),labels = NULL)
 legend("topleft", legend = c("serial","optimized parallel", "parallel","omp"), pch = c(16,17,15,18), bty = "n", col = c('black' ,'blue','red','green'))
@@ -118,4 +102,19 @@ ggplot(DF1, aes(x = problemSize, y = value,fill=variable)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   ylab("%")+xlab("n")+ theme_classic()+theme(legend.title=element_blank())
 dev.off()
-
+#################################blocking optimization############################################
+rm(list=ls())
+png("blocking_optimization.png", width = 6, height = 6, units = "in", res= 300)
+code <- c("default block size", "1 block", "16 inner blocks,\n ")
+dev.off()
+################################overall speedup###################################################
+rm(list=ls())
+png("overall_speedup.png",width = 6, height = 6, units = "in", res= 300)
+aws_serial <- c(.001,.001,.001,.001,.007,.049,1.151, 13.465)
+aws_acc <- c(2.288, 2.271,2.280,2.251, 2.277, 2.318, 2.893,8.328)
+acc_speedup< - aws_serial/aws_acc
+ody_serial<- c()
+ody_omp <- c()
+ody_speedup <-c()
+problemSize <- c(2, 3, 4, 5, 6, 7, 8, 9, 10)
+dev.off()
