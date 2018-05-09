@@ -92,7 +92,7 @@ The serial code `goldbach.c` consists of:
   2. a loop for verifying Goldbach's conjecture for even numbers in the input interval.
 
 Example of vanilla compile &amp; run commands: 
-  * compile: `gcc goldbach.c -o goldbach`
+  * compile: `gcc goldbach_v7.c -o goldbach`
   * run: `./goldbach <x_min> <x_max>`.
 
 ### 3.1. Eratosthenes sieve
@@ -233,7 +233,7 @@ We see that our decision to forego multi-node assembly and storage of the Eratos
 Example compile &amp; run commands:
 ```C
 $ module load intel/17.0.2-fasrc01 mpich/3.2-fasrc03
-$ mpicc -O3 v1_mpi_goldbach.c -o v1_mpi_O3
+$ mpicc -O3 mpi_goldbach_v1.c -o v1_mpi_O3
 $ time mpirun -np 8 ./v1_mpi_O3 4 1000000000
 ```
 
