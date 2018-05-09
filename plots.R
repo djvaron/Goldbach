@@ -94,14 +94,14 @@ unoptimizedParallel <- c(2.273,
                          31.697)
 A <- c(2, 3, 4, 5, 6, 7, 8, 9)
 problemSize <- c(10^A)
-plot(problemSize,serialTime,type = 'p', log ='x', col = "black", pch = 16, 
-     ylab = "Execution Time [s]", xlab = "Problem Size", main = "Execution Times versus Problem Size for g3.4xlarge",axes = F, ylim = c(0,50))
-points(problemSize, parallelTime,type = 'p', col = "blue", pch =17)
-points(problemSize, unoptimizedParallel, type = "p", col ="red", pch =15)
+plot(problemSize,serialTime/parallelTime,type = 'p', log ='x', col = "black", pch = 6, 
+     ylab = "Speedup", xlab = "Problem Size", main = "Speedup versus Problem Size for g3.4xlarge",axes = F, ylim = c(0,3))
+#points(problemSize, parallelTime,type = 'p', col = "blue", pch =17)
+points(problemSize, serialTime/unoptimizedParallel, type = "p", col ="red", pch =4)
 #points(problemSize, ompTime, type = "p", col = "green", pch=18)
 axis(1, at = problemSize, labels = NULL)
-axis(2, at = seq(0,50,by= 10),labels = NULL)
-legend("topleft", legend = c("serial","optimized parallel", "parallel"), pch = c(16,17,15), bty = "n", col = c('black' ,'blue','red'))
+axis(2, at = seq(0,3,by= .5),labels = NULL)
+legend("topleft", legend = c("optimized parallel", "parallel"), pch = c(6,4), bty = "n", col = c('black','red'))
 dev.off()
 ##########################################profiling#################################################
 rm(list=ls())
