@@ -268,7 +268,7 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
     1. store sieve array in disk space (I/O bottleneck).
     2. store sieve array across several nodes (added costs from MPI communication of array segments).
   * If we want to speed up our code for larger problem sizes, we need to increase parallelism of the Eratosthenes sieve. That means developing an MPI implementation that constructs the sieve across several nodes. This fits will with option 2 above. 
-  * Developing a segmented sieve that
+  * Developing a segmented sieve that can generate primes array between intervals of numbers. This can be ran across several nodes. 
   * Probably the best possible approach is to use a massive MPI algorithm that uses a large number of nodes to construct the sieve array in parallel and then distribute the verification loop iterations to many workers. It's unclear whether the best implementation would be MPI-only, hybrid MPI-OpenMP, or hybrid MPI-OpenACC, since we don't know how the problem scales when the sieve array is distributed across several nodes. 
 
 ## References
