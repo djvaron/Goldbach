@@ -210,7 +210,7 @@ This approach has two major weaknesses:
 In the second MPI approach, each process constructs its own sieve array before work is distributed as in approach 1. This MPI implementation also fails to parallelize the Eratosthenes sieve, but it boosts performance by distributing the verification loop iterations to numerous workers without incurring `MPI_Send()` overhead costs.
 
 #### Comparison
-We compare execution times of the two MPI approaches for a problem size of 1.4&times;10<sup>10</sup>, using up to 32 cores on a single node:
+We compare execution times of the two MPI approaches for a problem size of 1.4&times;10<sup>9</sup>, using up to 32 cores on a single node:
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
 
