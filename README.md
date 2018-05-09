@@ -23,7 +23,8 @@ We tested the following forms of parallelism:
 Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a `g3.4xlarge` instance with 16 GB of GPU memory.  
 
 `huce_intel` specs:
-```Architecture:          x86_64
+```
+Architecture:          x86_64
 CPU op-mode(s):        32-bit, 64-bit
 Byte Order:            Little Endian
 CPU(s):                32
@@ -172,7 +173,7 @@ int main(int argc, char** argv) {
 
 We find that the computational cost of verifying Goldbach's conjecture using our simple implementations of the Eratosthenes sieve and verification loop is trivial up to 10<sup>7</sup>. From there, the cost grows rapidly. Using the `O3` optimization flag speeds up our code by nearly a factor of four for problem sizes 10<sup>8</sup> and higher. We therefore use `O3` optimization for all of our parallel implementations.
 
-<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_10.png" width="600" alt="SERIAL"/>
+<img src="https://github.com/ardwwa/Goldbach/blob/master/serial_times_11.png" width="600" alt="SERIAL"/>
 
 Problem size for our serial code is limited to 10<sup>11</sup> by the underlying architecture of the `huce_intel` partition, which consists of 32-core nodes with 4 GB RAM per core, for a total of 128 GB RAM per node. For `limit` = 10<sup>11</sup>, the sieve array <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;B" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;B" title="B" /></a> occupies 100 GB, saturating random access memory on an individual node.
 
@@ -189,8 +190,11 @@ To better understand how cost scales with problem size, we profiled our code usi
 For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
 
 ## 4. OpenMP
-We implemented OpenMP and parallelized our code across 1 to 32 threads on the `huce_intel` partition and generated the figure below.  
+We parallelize the all loops in the sieve. The if-statement break within the main function prevents us from parallelizing the inner loop. 
+We implemented OpenMP parallelization across 1 to 32 threads on the `huce_intel` partition and generated the figure below for a problem sizes of 10<sup>10</sup>,10<sup>9</sup> and 10<sup>8</sup>. We see the largest speedup for 10<sup>8</sup> versus larger problem sizes. As the primes array grows, the code spends a proportionally longer time creating the array versus checking through the array. This causes a disproportionate increase in the sieve with respect to the main function.
+The sudden increase in 0<sup>8</sup> at 32 threads that is not seen in 10<sup>9</sup> and 10<sup>10</sup> can be owed to the shift in sieve versus main function times at 10<sup>8</sup>. After 10<sup>8</sup> the parallelization in the sieve doesn't overcome the increasing time burden of creating the primes array.
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
+
 
 ## 5. MPI
 We explored two MPI implementations of our code. 
@@ -210,7 +214,7 @@ This approach has two major weaknesses:
 In the second MPI approach, each process constructs its own sieve array before work is distributed as in approach 1. This MPI implementation also fails to parallelize the Eratosthenes sieve, but it boosts performance by distributing the verification loop iterations to numerous workers without incurring `MPI_Send()` overhead costs.
 
 #### Comparison
-We compare execution times of the two MPI approaches for a problem size of 1.4&times;10<sup>10</sup>, using up to 32 cores on a single node:
+We compare execution times of the two MPI approaches for a problem size of 1.4&times;10<sup>9</sup>, using up to 32 cores on a single node:
 
 <img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
 
@@ -246,16 +250,19 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
 <img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
 
   The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10<sup>8</sup>. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10<sup>8</sup> problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
-
-  The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The unoptimized parallel code uses the default 128 thread count which access the same global memory of the primes array. We desire more threads due to the embarrasingly parallel nature of our code, however without blocking, the memory access to the primes array is hindered by communications overhead. So instead of pulling from global memory again, blocking the primes array into the shared memory allows other threads within the same block to access and edit it. Specifying number of gangs distributes the primes array into a number of blocks to be shared by a smaller number of threads, decreasing the communications overhead when editing the primes array. The maximum number of threads in the system is 2048 (pgaccelinfo), so the total number of threads executing per block must multiply to 2048. We optimize the distribution of work into the blocks and threads and see a substantial increase in performance as seen by the blue triangles (gang/vector distributed work) versus red squares (unoptimized). 
   
-  We are unsure why the OpenACC acceleration is better than the OpenMP. We postulate that OpenACC is more optimized than OpenACC with GPU architecture. Additionally, the blocking as seen by the unoptimized versus optimized OpenACC improves the OpenACC performance by reducing the communications overheads to the primes array.
+<img src="https://github.com/ardwwa/Goldbach/blob/master/blocking_optimization_9.png" width="600" alt="blocking">
+
+  The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The unoptimized parallel code uses the default 128 thread count which access the same global memory of the primes array. We desire more threads due to the embarrasingly parallel nature of our code, however without optimizing the blocking, the memory access to the primes array is hindered by communications overhead. Blocking the primes array into the shared memory allows other threads within the same block to access and edit it. Specifying number of gangs distributes the primes array into a number of blocks to be shared by a smaller number of threads, decreasing the communications overhead when editing the primes array. The maximum number of threads in the system is 2048 (pgaccelinfo), so the total number of threads executing per block must multiply to 2048. Within the sieve, we optimize the distribution of the outer loop into 16 blocks with 2 threads each and the inner loop to 16 blocks with 4 threads each and see a substantial increase in performance. 
+  
+ <!---We are unsure why the OpenACC acceleration is better than the OpenMP. We postulate that OpenACC is more optimized than OpenACC with GPU architecture. Additionally, the blocking as seen by the unoptimized versus optimized OpenACC improves the OpenACC performance by reducing the communications overheads to the primes array.--->
   
   At 10<sup>10</sup>, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 10 GB and the CUDA global memory size for the g3.4xlarge was 8 GB. To test a number larger than 10<sup>10</sup>, a multi-node code with MPI-OpenACC across more than one GPU could be developed.
 
 ## 8. Conclusions
-
-  [comment]: <> * OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).
+<img src="https://github.com/ardwwa/Goldbach/blob/master/overall_speedup.png" width="600" alt="overall">
+ <!--* OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).-->
+  
   * Problem size is limited by the size of the Eratosthenes sieve array.
   * If we want to solve larger problems, we need to find a new way to store the sieve array, because it quickly grows too large to be stored in RAM on a single `huce_intel` compute node. We have at least two options, neither of which is ideal:
     1. store sieve array in disk space (I/O bottleneck).
