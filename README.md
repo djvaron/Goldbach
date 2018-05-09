@@ -195,6 +195,7 @@ We implemented OpenMP parallelization across 1 to 32 threads on the `huce_intel`
 The sudden increase in 10<sup>8</sup> at 32 threads that is not seen in 10<sup>9</sup> and 10<sup>10</sup> can be owed to the shift in sieve versus main function times at 10<sup>8</sup>. After 10<sup>8</sup> the parallelization in the sieve doesn't overcome the increasing time burden of creating the primes array.
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
 
+This was compiled with gcc version 4.4.7 on odyssey with the following command: `gcc -fopenmp -lm -O3 omp_goldbach_v2.c -o omp_goldbach_v2`
 
 ## 5. MPI
 We explored two MPI implementations of our code. 
