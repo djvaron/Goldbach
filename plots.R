@@ -109,8 +109,8 @@ dev.off()
 rm(list=ls())
 png("profiling.png",width = 6, height = 6, units = "in", res = 300)
 problemSize <- c(6, 7, 8, 9, 10)
-Sieve <- c(25.19,33.59,56.13 ,60.27,60.02)*.01
-totalTime <- c(.04,0.54,10.36,140.05,201.47)
+Sieve <- c(25.17,34.08,54.74 ,59.67,60.02)*.01
+# totalTime <- c(.04,0.54,10.36,140.05,201.47)
 Main <- 1 - Sieve
 df <- data.frame(problemSize, Sieve, Main)
 library(reshape2)
