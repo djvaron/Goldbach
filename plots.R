@@ -101,7 +101,7 @@ points(problemSize, unoptimizedParallel, type = "p", col ="red", pch =15)
 #points(problemSize, ompTime, type = "p", col = "green", pch=18)
 axis(1, at = problemSize, labels = NULL)
 axis(2, at = seq(0,80,by= 10),labels = NULL)
-legend("topleft", legend = c("serial","optimized parallel", "parallel","omp"), pch = c(16,17,15,18), bty = "n", col = c('black' ,'blue','red','green'))
+legend("topleft", legend = c("serial","optimized parallel", "parallel"), pch = c(16,17,15), bty = "n", col = c('black' ,'blue','red'))
 dev.off()
 ##########################################profiling#################################################
 rm(list=ls())
