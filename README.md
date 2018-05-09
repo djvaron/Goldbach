@@ -251,7 +251,7 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
 
   The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10<sup>8</sup>. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10<sup>8</sup> problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
   
-<img src="https://github.com/ardwwa/Goldbach/blob/master/blocking_optimization_9.png" width="600" alt="blocking">
+<!--img src="https://github.com/ardwwa/Goldbach/blob/master/blocking_optimization_9.png" width="600" alt="blocking"-->
 
   The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The unoptimized parallel code uses the default 128 thread count which access the same global memory of the primes array. We desire more threads due to the embarrasingly parallel nature of our code, however without optimizing the blocking, the memory access to the primes array is hindered by communications overhead. Blocking the primes array into the shared memory allows other threads within the same block to access and edit it. Specifying number of gangs distributes the primes array into a number of blocks to be shared by a smaller number of threads, decreasing the communications overhead when editing the primes array. The maximum number of threads in the system is 2048 (pgaccelinfo), so the total number of threads executing per block must multiply to 2048. Within the sieve, we optimize the distribution of the outer loop into 16 blocks with 2 threads each and the inner loop to 16 blocks with 4 threads each and see a substantial increase in performance. 
   
@@ -266,8 +266,9 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
   * Problem size is limited by the size of the Eratosthenes sieve array.
   * If we want to solve larger problems, we need to find a new way to store the sieve array, because it quickly grows too large to be stored in RAM on a single `huce_intel` compute node. We have at least two options, neither of which is ideal:
     1. store sieve array in disk space (I/O bottleneck).
-    2. store sieve array across several (added costs from MPI communication of array segments).
+    2. store sieve array across several nodes (added costs from MPI communication of array segments).
   * If we want to speed up our code for larger problem sizes, we need to increase parallelism of the Eratosthenes sieve. That means developing an MPI implementation that constructs the sieve across several nodes. This fits will with option 2 above. 
+  * Developing a segmented sieve that
   * Probably the best possible approach is to use a massive MPI algorithm that uses a large number of nodes to construct the sieve array in parallel and then distribute the verification loop iterations to many workers. It's unclear whether the best implementation would be MPI-only, hybrid MPI-OpenMP, or hybrid MPI-OpenACC, since we don't know how the problem scales when the sieve array is distributed across several nodes. 
 
 ## References
