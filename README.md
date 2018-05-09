@@ -260,8 +260,9 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
   At 10<sup>10</sup>, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 10 GB and the CUDA global memory size for the g3.4xlarge was 8 GB. To test a number larger than 10<sup>10</sup>, a multi-node code with MPI-OpenACC across more than one GPU could be developed.
 
 ## 8. Conclusions
-
-  [comment]: <> * OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).
+<img src="https://github.com/ardwwa/Goldbach/blob/master/overall_speedup.png" width="600" alt="overall">
+  [comment]: <* OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).>
+  
   * Problem size is limited by the size of the Eratosthenes sieve array.
   * If we want to solve larger problems, we need to find a new way to store the sieve array, because it quickly grows too large to be stored in RAM on a single `huce_intel` compute node. We have at least two options, neither of which is ideal:
     1. store sieve array in disk space (I/O bottleneck).
