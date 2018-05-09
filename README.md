@@ -274,7 +274,7 @@ $ time ./acc_blocked_goldbach 4 10000
 ```
 
 ## 8. Conclusions
-<img src="https://github.com/ardwwa/Goldbach/blob/master/overall_speedup_2.png" width="600" alt="overall">
+<img src="https://github.com/ardwwa/Goldbach/blob/master/overall_speedup_3.png" width="600" alt="overall">
  <!--* OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).-->
   
   * Problem size is limited by the size of the Eratosthenes sieve array.
