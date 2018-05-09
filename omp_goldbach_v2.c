@@ -38,9 +38,9 @@
     return primes;
 }*/
 
-bool * sieve(long long int limit){
+bool * sieve(unsigned long long int limit){
 
-    unsigned int i,j;
+    unsigned long long int i,j;
     bool *primes;
     
     primes = calloc(limit, sizeof(bool));
@@ -71,10 +71,15 @@ return primes;
 
 int main(int argc, char** argv) {
     
-    int lower, upper, count, i, n;    
-    lower = atoi(argv[1]);
-    upper = atoi(argv[2]);
+    //int lower, upper, count, i, n;    
+    //lower = atoi(argv[1]);
+    //upper = atoi(argv[2]);
+    int count;
+    unsigned long long int lower, upper, i, n;
+    lower = strtoull(argv[1], (char **)NULL, 10);
+    upper = strtoull(argv[2], (char **)NULL, 10);
 
+    printf("lower = %lli, upper = %lli \n",lower,upper);
     //clock_t begin = clock();
     double begin = omp_get_wtime();
 
@@ -92,7 +97,7 @@ int main(int argc, char** argv) {
 		break;
 	    }
         }
-if (count == 0) {
+    if (count == 0) {
             printf("FALSE %d", n);
         }
 }
