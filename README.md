@@ -190,9 +190,12 @@ To better understand how cost scales with problem size, we profiled our code usi
 For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
 
 ## 4. OpenMP
-We parallelize the all loops in the sieve. The if-statement break within the main function prevents us from parallelizing the inner loop. 
-We implemented OpenMP parallelization across 1 to 32 threads on the `huce_intel` partition and generated the figure below for a problem sizes of 10<sup>10</sup>,10<sup>9</sup> and 10<sup>8</sup>. We see the largest speedup for 10<sup>8</sup> versus larger problem sizes. As the primes array grows, the code spends a proportionally longer time creating the array versus checking through the array. This causes a disproportionate increase in the sieve with respect to the main function.
-The sudden increase in 10<sup>8</sup> at 32 threads that is not seen in 10<sup>9</sup> and 10<sup>10</sup> can be owed to the shift in sieve versus main function times at 10<sup>8</sup>. After 10<sup>8</sup> the parallelization in the sieve doesn't overcome the increasing time burden of creating the primes array.
+We parallelize all loops in the Eratosthenes sieve. The if-statement break within the verification loop program prevents us from parallelizing the inner loop there. 
+
+We implemented OpenMP parallelization across 1 to 32 threads on the `huce_intel` partition and generated the figure below for problem sizes of 10<sup>10</sup>,10<sup>9</sup> and 10<sup>8</sup>. We see the largest speedup for 10<sup>8</sup> versus larger problem sizes. As the primes array grows, the code spends a proportionally longer time creating the array versus checking through the array. This causes a disproportionate increase in the sieve with respect to the main function.
+
+The sudden increase in 10<sup>8</sup> at 32 threads, not seen in 10<sup>9</sup> and 10<sup>10</sup>, can be explained by the shift in sieve versus main function times at 10<sup>8</sup>. After 10<sup>8</sup>, parallelizing the sieve does not offset the increased cost of assmebling the primes array.
+
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
 
 Example compile & run commands: 
