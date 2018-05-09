@@ -140,7 +140,7 @@ ody_speedup <- ody_serial/c(NA,NA,0.0824091, 0.0812076,0.089224, 0.283266,2.2987
 hybrid_speedup = ody_serial/c(NA,NA,NA,NA,NA,NA,NA,16.623,137.703,1301.429)
 #MPI_speedup = c(NA,NA,NA,NA,NA,NA,NA,NA,)
 problemSize <- c(2, 3, 4, 5, 6, 7, 8, 9, 10,11)
-plot(problemSize,acc_speedup,xlab='n',ylab="speedup",main = "Parallel speedup vs. problem size$"
+plot(problemSize,acc_speedup,xlab='n',ylab="speedup",main = "Parallel speedup vs. problem size 1e+n"
      , pch = 17,col='blue',ylim = c(0,8),axes = F)
 points(problemSize, ody_speedup,pch = 16, col = 'black')
 points(problemSize,hybrid_speedup,pch=18,col = 'green')
