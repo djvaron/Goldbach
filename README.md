@@ -92,7 +92,7 @@ The serial code `goldbach.c` consists of:
   2. a loop for verifying Goldbach's conjecture for even numbers in the input interval.
 
 Example of vanilla compile &amp; run commands: 
-  * compile: `gcc goldbach.c -o goldbach`
+  * compile: `gcc goldbach_v7.c -o goldbach`
   * run: `./goldbach <x_min> <x_max>`.
 
 ### 3.1. Eratosthenes sieve
@@ -190,11 +190,19 @@ To better understand how cost scales with problem size, we profiled our code usi
 For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
 
 ## 4. OpenMP
-We parallelize the all loops in the sieve. The if-statement break within the main function prevents us from parallelizing the inner loop. 
-We implemented OpenMP parallelization across 1 to 32 threads on the `huce_intel` partition and generated the figure below for a problem sizes of 10<sup>10</sup>,10<sup>9</sup> and 10<sup>8</sup>. We see the largest speedup for 10<sup>8</sup> versus larger problem sizes. As the primes array grows, the code spends a proportionally longer time creating the array versus checking through the array. This causes a disproportionate increase in the sieve with respect to the main function.
-The sudden increase in 0<sup>8</sup> at 32 threads that is not seen in 10<sup>9</sup> and 10<sup>10</sup> can be owed to the shift in sieve versus main function times at 10<sup>8</sup>. After 10<sup>8</sup> the parallelization in the sieve doesn't overcome the increasing time burden of creating the primes array.
+We parallelize all loops in the Eratosthenes sieve. The if-statement break within the verification loop program prevents us from parallelizing the inner loop there. 
+
+We implemented OpenMP parallelization across 1 to 32 threads on the `huce_intel` partition and generated the figure below for problem sizes of 10<sup>10</sup>,10<sup>9</sup> and 10<sup>8</sup>. We see the largest speedup for 10<sup>8</sup> versus larger problem sizes. As the primes array grows, the code spends a proportionally longer time creating the array versus checking through the array. This causes a disproportionate increase in the sieve with respect to the main function.
+
+The sudden increase in 10<sup>8</sup> at 32 threads, not seen in 10<sup>9</sup> and 10<sup>10</sup>, can be explained by the shift in sieve versus main function times at 10<sup>8</sup>. After 10<sup>8</sup>, parallelizing the sieve does not offset the increased cost of assmebling the primes array.
+
 <img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
 
+Example compile & run commands: 
+```C
+$ gcc -fopenmp -lm -O3 omp_goldbach_v2.c -o omp_goldbach_v2
+$ time ./omp_goldbach_v2 4 100
+```
 
 ## 5. MPI
 We explored two MPI implementations of our code. 
@@ -225,7 +233,7 @@ We see that our decision to forego multi-node assembly and storage of the Eratos
 Example compile &amp; run commands:
 ```C
 $ module load intel/17.0.2-fasrc01 mpich/3.2-fasrc03
-$ mpicc -O3 v1_mpi_goldbach.c -o v1_mpi_O3
+$ mpicc -O3 mpi_goldbach_v1.c -o v1_mpi_O3
 $ time mpirun -np 8 ./v1_mpi_O3 4 1000000000
 ```
 
@@ -259,17 +267,22 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
   
   At 10<sup>10</sup>, the code experiences a segmentation fault. This is because the size of the boolean primes array becomes on the order of 10 GB and the CUDA global memory size for the g3.4xlarge was 8 GB. To test a number larger than 10<sup>10</sup>, a multi-node code with MPI-OpenACC across more than one GPU could be developed.
 
+Example Compile and run commands
+``` 
+$ pgcc -O3 -acc -Minfo acc_blocked_goldbach.c -o acc_blocked_goldbach
+$ time ./acc_blocked_goldbach 4 10000
+```
+
 ## 8. Conclusions
-<img src="https://github.com/ardwwa/Goldbach/blob/master/overall_speedup.png" width="600" alt="overall">
+<img src="https://github.com/ardwwa/Goldbach/blob/master/overall_speedup_3.png" width="600" alt="overall">
  <!--* OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).-->
   
   * Problem size is limited by the size of the Eratosthenes sieve array.
   * If we want to solve larger problems, we need to find a new way to store the sieve array, because it quickly grows too large to be stored in RAM on a single `huce_intel` compute node. We have at least two options, neither of which is ideal:
     1. store sieve array in disk space (I/O bottleneck).
     2. store sieve array across several nodes (added costs from MPI communication of array segments).
-  * If we want to speed up our code for larger problem sizes, we need to increase parallelism of the Eratosthenes sieve. That means developing an MPI implementation that constructs the sieve across several nodes. This fits will with option 2 above. 
-  * Developing a segmented sieve that
-  * Probably the best possible approach is to use a massive MPI algorithm that uses a large number of nodes to construct the sieve array in parallel and then distribute the verification loop iterations to many workers. It's unclear whether the best implementation would be MPI-only, hybrid MPI-OpenMP, or hybrid MPI-OpenACC, since we don't know how the problem scales when the sieve array is distributed across several nodes. 
+  * If we want to speed up our code for larger problem sizes, we need to increase parallelism of the Eratosthenes sieve. That means developing an MPI implementation of a segmented sieve, which constructs the primes array across several nodes. This fits will with option 2 above. 
+  * Probably the best possible approach is to use a massive MPI algorithm that uses a large number of nodes to construct the sieve array in parallel and then distribute the verification loop iterations to many workers. It's unclear whether the best implementation would be hybrid MPI-OpenMP or hybrid MPI-OpenACC, since we don't know how the problem scales when the sieve array is distributed across several nodes. However, judging from the summary speedup plot above, both approaches seem promising. OpenMP-MPI produces the best performance in our experiments up to 10<sup>11</sup>, but OpenACC looks as though it may outpace the hybrid approach as problem size grows.  
 
 ## References
   * Oliveria e Silva, T., Herzog, S., and Pardi, S.: Empirical verification of the even Goldbach conjecture and computation of prime gaps up to 4&times;10<sup>18</sup>. _Math. Comput._, 83(288), 2033-2060, [https://doi.org/10.1090/S0025-5718-2013-02787-1](https://doi.org/10.1090/S0025-5718-2013-02787-1), 2014.
