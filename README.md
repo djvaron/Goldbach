@@ -287,6 +287,7 @@ $ time ./acc_blocked_goldbach 4 10000
 ## References
   * Oliveria e Silva, T., Herzog, S., and Pardi, S.: Empirical verification of the even Goldbach conjecture and computation of prime gaps up to 4&times;10<sup>18</sup>. _Math. Comput._, 83(288), 2033-2060, [https://doi.org/10.1090/S0025-5718-2013-02787-1](https://doi.org/10.1090/S0025-5718-2013-02787-1), 2014.
 
+<!--
 ## example latex equation with HTML, from [codecogs](https://www.codecogs.com/latex/eqneditor.php):
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
@@ -295,7 +296,7 @@ $ time ./acc_blocked_goldbach 4 10000
 Also, [this page](http://vim.wikia.com/wiki/Moving_around) about moving around in vim.
 
 Also also, [this markdown cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#code).
-
+-->
 
 
 
