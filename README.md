@@ -20,7 +20,7 @@ We tested the following forms of parallelism:
   * OpenACC GPU accelerated computing
 
 ## 2. System specifications
-Experiments with the serial code, MPI, OpenMP, and hybrid MPI/OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a `g3.4xlarge` instance with 16 GB of GPU memory.  
+Experiments with the serial code, MPI, OpenMP, and hybrid MPI-OpenMP were conducted on the `huce_intel` partition of the Harvard Odyssey research computing cluster. Experiments with OpenACC were conducted on AWS using a `g3.4xlarge` instance with 8 GB of GPU memory.  
 
 `huce_intel` specs:
 ```
