@@ -185,7 +185,7 @@ Neither of these approaches is ideal, however, because passing large arrays betw
 
 To better understand how cost scales with problem size, we profiled our code using the GNU gprof profiler and plotted the fractions of execution time spent on the Eratosthenes sieve and verification loop versus problem size:
 
-<img src="https://github.com/ardwwa/Goldbach/blob/master/profiling.png" width="600" alt="OPENACC"/>
+<img src="https://github.com/ardwwa/Goldbach/blob/master/figures/profiling.png" width="600" alt="OPENACC"/>
 
 For problem sizes greater than 10<sup>7</sup>, our code spends more time in the sieve subroutine than the verification loop. Thus, we expect that parallelizing the sieve should produce the greatest performance gains when the problem size is large. 
 
@@ -196,7 +196,7 @@ We implemented OpenMP parallelization across 1 to 32 threads on the `huce_intel`
 
 The sudden increase in 10<sup>8</sup> at 32 threads, not seen in 10<sup>9</sup> and 10<sup>10</sup>, can be explained by the shift in sieve versus main function times at 10<sup>8</sup>. After 10<sup>8</sup>, parallelizing the sieve does not offset the increased cost of assmebling the primes array.
 
-<img src="https://github.com/ardwwa/Goldbach/blob/master/omp_speedup_10.png" width="600" alt="OPENMP"/>
+<img src="https://github.com/ardwwa/Goldbach/blob/master/figures/omp_speedup_10.png" width="600" alt="OPENMP"/>
 
 Example compile & run commands: 
 ```C
@@ -224,7 +224,7 @@ In the second MPI approach, each process constructs its own sieve array before w
 #### Comparison
 We compare execution times of the two MPI approaches for a problem size of 1.4&times;10<sup>9</sup>, using up to 32 cores on a single node:
 
-<img src="https://github.com/ardwwa/Goldbach/blob/master/mpi_v1v2.png" width="600" alt="OPENACC">
+<img src="https://github.com/ardwwa/Goldbach/blob/master/figures/mpi_v1v2.png" width="600" alt="OPENACC">
 
 Performance in approach 1 diminishes as the number of cores increases. This is because the sieve array, which occupies 1.4 GB, must be passed from the master process to an increasing number of worker processes. By contrast, performance in approach 2 improves with increasing core count up to `numCores = 4`, but then remains nearly constant. This is because the cost of initializing and maintaining the MPI environment offsets performance gains from increased parallelism of the verification loop. Adding more cores will only increase performance if the problem size is increased as well and/or the sieve array is assembled in distributed memory.
 
@@ -242,7 +242,7 @@ We designed a hybrid MPI-OpenMP version of our code that parallelizes the Eratos
 
 We compare execution times for different problem sizes and numbers of processors:
 
-<img src="https://github.com/ardwwa/Goldbach/blob/master/hybrid_times_10.png" width="600" alt="HYBRID">
+<img src="https://github.com/ardwwa/Goldbach/blob/master/figures/hybrid_times_10.png" width="600" alt="HYBRID">
 
 This approach scales better than the OpenMP and MPI approaches discussed in Sect. 4 and 5. With 128 processors across 4 compute nodes we are able to verify Goldbach's conjecture for even numbers up to 10<sup>11</sup> in a reasonable amount of time (approximately 20 minutes).
 
@@ -255,11 +255,11 @@ $ time srun -n 4 --cpus-per-task=32 --mpi=pmi2 ./hybrid_O3 4 10000000000
 ```
 
 ## 7. OpenACC
-<img src="https://github.com/ardwwa/Goldbach/blob/master/acc_speedup.png" width="600" alt="OPENACC">
+<img src="https://github.com/ardwwa/Goldbach/blob/master/figures/acc_speedup.png" width="600" alt="OPENACC">
 
   The increase in execution time scales strangely with problem size, with a slow increase that accelerates after 10<sup>8</sup>. The ACC optimization becomes beneficial only after 10^8. This is because the communications overhead with transfering the primes boolean array between the threads hinders the performance of the parallel code, however once the serial code is slowed down by the 10<sup>8</sup> problem size, the communications overhead becomes small compared to the performance boost of the parallel code.
   
-<!--img src="https://github.com/ardwwa/Goldbach/blob/master/blocking_optimization_9.png" width="600" alt="blocking"-->
+<!--img src="https://github.com/ardwwa/Goldbach/blob/master/figures/blocking_optimization_9.png" width="600" alt="blocking"-->
 
   The optimized parallel code uses gangs and vectors to parallelize the code among more threads. The unoptimized parallel code uses the default 128 thread count/block with 79 blocks. We desire more threads due to the embarrasingly parallel nature of our code, however without optimizing the blocking, the memory access to the primes array is hindered by communications overhead. Blocking the primes array into the shared memory allows other threads within the same block to access and edit it. Specifying number of gangs distributes the primes array into a number of blocks to be shared by a smaller number of threads, decreasing the communications overhead when editing the primes array. The maximum number of threads in the system is 2048 (pgaccelinfo), so the total number of threads executing per block must multiply to 2048. Within the sieve, we optimize the distribution of the outer loop into 16 blocks with 2 threads each and the inner loop to 16 blocks with 4 threads each and see a substantial increase in performance. 
   
@@ -274,7 +274,7 @@ $ time ./acc_blocked_goldbach 4 10000
 ```
 
 ## 8. Conclusions
-<img src="https://github.com/ardwwa/Goldbach/blob/master/overall_speedup_3.png" width="600" alt="overall">
+<img src="https://github.com/ardwwa/Goldbach/blob/master/figures/overall_speedup_3.png" width="600" alt="overall">
  <!--* OpenACC is our fastest implementation for problem size 10<sup>11</sup> (???).-->
   
   * Problem size is limited by the size of the Eratosthenes sieve array.
